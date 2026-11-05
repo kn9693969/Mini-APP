@@ -1,863 +1,707 @@
-<!DOCTYPE html>
-<html lang="my" class="scroll-smooth">
+& Padauk for Burmese -->
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap" rel="stylesheet"><!DOCTYPE html>
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>龍庭 • Royal Dragon Fine Dining</title>
-    
+    <title>Grand Dynasty Chinese Cuisine - မီနူး</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts for Burmese & Luxury Serif -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Sans+Myanmar:wght@300;400;500;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
-    
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <!-- Google Fonts: Playfair Display 
+    <!-- HTML5 QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        onyx: {
-                            DEFAULT: '#0B0B0E',
-                            card: '#14141A',
-                            light: '#1D1D26',
-                            border: '#2A2A38'
-                        },
                         gold: {
-                            light: '#F5E096',
-                            DEFAULT: '#D4AF37',
-                            dark: '#AA820A',
-                            glow: 'rgba(212, 175, 55, 0.35)'
+                            100: '#FFF7D6',
+                            300: '#F3E5AB',
+                            400: '#D4AF37',
+                            500: '#C5A059',
+                            600: '#AA7C11',
+                            700: '#8B6508'
                         },
-                        crimson: {
-                            DEFAULT: '#8B0000',
-                            bright: '#C91A25',
-                            dark: '#5A0000'
+                        dark: {
+                            900: '#0B0B0C',
+                            800: '#141416',
+                            700: '#1F1F23',
+                            600: '#2D2D35'
                         }
                     },
                     fontFamily: {
-                        burmese: ['"Noto Sans Myanmar"', 'Padauk', 'sans-serif'],
-                        cinzel: ['Cinzel', 'serif']
-                    },
-                    boxShadow: {
-                        'gold-glow': '0 0 25px rgba(212, 175, 55, 0.25)',
-                        'gold-glow-lg': '0 0 40px rgba(212, 175, 55, 0.4)',
-                        'crimson-glow': '0 0 25px rgba(201, 26, 37, 0.4)'
+                        serif: ['"Playfair Display"', 'serif'],
+                        myanmar: ['Padauk', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-
     <style>
         body {
-            font-family: 'Noto Sans Myanmar', 'Padauk', sans-serif;
-            background-color: #0B0B0E;
-            color: #E2E8F0;
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(139, 0, 0, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
-            background-attachment: fixed;
+            background-color: #0B0B0C;
+            color: #E4E4E7;
+            font-family: 'Padauk', sans-serif;
         }
-
-        /* Metallic Gold Gradient Border */
-        .gold-border-gradient {
-            border: 1px solid transparent;
-            background-image: linear-gradient(#14141A, #14141A), linear-gradient(135deg, #D4AF37 0%, #4A3B10 50%, #D4AF37 100%);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-        }
-
-        .gold-text-gradient {
-            background: linear-gradient(135deg, #FFF0B3 0%, #D4AF37 50%, #997400 100%);
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF7D6 0%, #D4AF37 50%, #AA7C11 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        /* Glassmorphism */
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .gold-border-glow {
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+        }
+        .gold-btn {
+            background: linear-gradient(135deg, #D4AF37 0%, #C5A059 50%, #AA7C11 100%);
+            color: #000;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .gold-btn:hover {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            transform: translateY(-1px);
+        }
         .glass-panel {
-            background: rgba(20, 20, 26, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(212, 175, 55, 0.18);
+            background: rgba(20, 20, 22, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
-
-        .glass-panel-header {
-            background: rgba(11, 11, 14, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
-        }
-
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0B0B0E;
+            background: #0B0B0C;
         }
         ::-webkit-scrollbar-thumb {
-            background: #D4AF37;
+            background: #2D2D35;
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #F5E096;
-        }
-
-        /* Shimmer Animation */
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        .shimmer-gold {
-            background: linear-gradient(90deg, #D4AF37 0%, #FFF0B3 50%, #D4AF37 100%);
-            background-size: 200% 100%;
-            animation: shimmer 4s infinite linear;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: #C5A059;
         }
     </style>
 </head>
-<body class="min-h-screen pb-32 md:pb-12 text-gray-200">
 
-    <!-- Top Sticky Glass Header -->
-    <header class="sticky top-0 z-40 glass-panel-header transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
-            
-            <!-- Logo & Brand -->
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-crimson-bright to-crimson-dark flex items-center justify-center border border-gold shadow-gold-glow">
-                    <span class="font-cinzel font-black text-gold text-xl leading-none">龍</span>
+<body class="min-h-screen flex flex-col justify-between pb-24 select-none">
+
+    <!-- Header Header Bar -->
+    <header class="sticky top-0 z-40 glass-panel gold-border border-b border-t-0 border-x-0">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full border border-gold-400/40 flex items-center justify-center bg-dark-800 shadow-inner">
+                    <span class="font-serif text-gold-400 font-bold text-xl">帝</span>
                 </div>
                 <div>
-                    <h1 class="text-base sm:text-lg font-bold tracking-wide shimmer-gold leading-tight">
-                        龍庭 • Imperial Palace
-                    </h1>
-                    <p class="text-[11px] text-gold/80 font-light">
-                        အဆင့်မြင့် တရုတ်ရိုးရာ စားသောက်ဆိုင်
-                    </p>
+                    <h1 class="font-serif text-xl md:text-2xl font-bold tracking-wider gold-gradient-text">GRAND DYNASTY</h1>
+                    <p class="text-xs text-gold-500/80 tracking-widest uppercase font-sans">คำဆိုင်မြင့် တရုတ်စားသောက်ဆိုင်</p>
                 </div>
             </div>
 
-            <!-- Currency Switcher Toggle -->
-            <div class="flex items-center gap-2 bg-onyx-card/90 p-1 rounded-full border border-gold/30 shadow-inner">
-                <button onclick="changeCurrency('MMK')" id="curr-MMK" class="px-3 py-1 text-xs font-bold rounded-full transition-all duration-300 bg-gradient-to-r from-gold to-gold-dark text-onyx shadow-md">
-                    MMK (ကျပ်)
-                </button>
-                <button onclick="changeCurrency('THB')" id="curr-THB" class="px-3 py-1 text-xs font-semibold rounded-full text-gold/70 hover:text-gold transition-all duration-300">
-                    THB (ဘတ်)
-                </button>
-            </div>
-
+            <!-- Table Number Indicator & Quick Input Button -->
+            <button onclick="focusTableInput()" class="flex items-center space-x-2 bg-dark-800 border border-gold-500/40 px-3 py-1.5 rounded-full hover:border-gold-400 transition-all">
+                <i class="fa-solid font-sm fa-chair text-gold-400"></i>
+                <span id="headerTableBadge" class="text-sm font-semibold text-gold-300">စားပွဲနံပါတ် ထည့်ပါ</span>
+            </button>
         </div>
     </header>
 
-    <!-- Luxury Hero Banner -->
-    <section class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-6 pb-2">
-        <div class="relative rounded-3xl overflow-hidden border border-gold/30 shadow-gold-glow">
-            <div class="absolute inset-0 bg-gradient-to-r from-onyx via-onyx/80 to-transparent z-10"></div>
-            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&auto=format&fit=crop&q=80" alt="Luxury Chinese Dining" class="w-full h-44 sm:h-56 object-cover object-center filter brightness-90">
-            
-            <div class="absolute inset-0 z-20 p-6 flex flex-col justify-center">
-                <span class="inline-block px-3 py-1 bg-crimson/80 backdrop-blur-md border border-gold/50 text-gold-light text-[10px] sm:text-xs font-semibold uppercase tracking-widest rounded-full w-max mb-2">
-                    ✦ Fine Dining Menu ✦
-                </span>
-                <h2 class="text-xl sm:text-3xl font-extrabold text-white tracking-wide max-w-md leading-tight">
-                    လက်ရာမြောက် ရိုးရာတရုတ် ဟင်းလျာများ
-                </h2>
-                <p class="text-xs sm:text-sm text-gray-300 mt-1 max-w-sm font-light">
-                    လတ်ဆတ်သော ပါဝင်ပစ္စည်းများဖြင့် အထူးချက်ပြုတ်ပြင်ဆင်ထားပါသည်။
-                </p>
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 pt-6 w-full flex-grow">
+
+        <!-- Table Selection Card -->
+        <section class="mb-6 p-4 rounded-xl glass-panel gold-border flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="p-3 bg-dark-800 rounded-lg text-gold-400 border border-gold-500/20">
+                    <i class="fa-solid fa-utensils text-lg"></i>
+                </div>
+                <div>
+                    <label for="tableNumber" class="block text-xs text-gold-400 font-semibold tracking-wide uppercase">
+                        စားပွဲနံပါတ် (REQUIRED / 必填) *
+                    </label>
+                    <p class="text-xs text-gray-400" id="tableStatusText">ကျေးဇူးပြု၍ သင့်စားပွဲနံပါတ်ကို ထည့်သွင်းပါ သို့မဟုတ် QR စကန်ဖတ်ပါ</p>
+                </div>
             </div>
-        </div>
-    </section>
+            <div class="flex items-center space-x-2 w-full md:w-auto">
+                <div class="relative flex-1 md:w-44">
+                    <input type="text" id="tableNumber" placeholder="ဥပမာ - A08 / T-12" 
+                        oninput="syncTableNumber(this.value)"
+                        class="w-full bg-dark-900 border border-gold-500/30 text-gold-100 placeholder-gray-600 px-4 py-2.5 rounded-lg focus:outline-none focus:border-gold-400 text-sm tracking-widest text-center uppercase font-bold transition-all">
+                </div>
+                <!-- Scan QR Button -->
+                <button onclick="openQRScanner()" class="gold-btn px-4 py-2.5 rounded-lg flex items-center justify-center space-x-2 text-xs font-bold uppercase whitespace-nowrap">
+                    <i class="fa-solid fa-qrcode text-sm"></i>
+                    <span>QR စကန်ဖတ်ရန်</span>
+                </button>
+            </div>
+        </section>
 
-    <!-- Category Filter Sticky Navigation -->
-    <nav class="sticky top-[61px] z-30 bg-onyx/90 backdrop-blur-xl border-y border-gold/20 py-3 my-4">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth">
-            <button onclick="switchCategory('all')" id="tab-all" class="cat-tab active px-5 py-2 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-300 bg-gradient-to-r from-gold to-gold-dark text-onyx shadow-gold-glow">
-                <i class="fa-solid fa-crown mr-1.5"></i> အားလုံး (All)
-            </button>
-            <button onclick="switchCategory('chef_signature')" id="tab-chef_signature" class="cat-tab px-5 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 bg-onyx-card text-gold/80 hover:text-gold border border-gold/20">
-                <i class="fa-solid fa-star mr-1.5 text-gold"></i> မစားမဖြစ် အထူးဟင်းလျာ
-            </button>
-            <button onclick="switchCategory('noodle_rice')" id="tab-noodle_rice" class="cat-tab px-5 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 bg-onyx-card text-gold/80 hover:text-gold border border-gold/20">
-                <i class="fa-solid fa-bowl-rice mr-1.5"></i> ခေါက်ဆွဲ နှင့် ထမင်းကြော်
-            </button>
-            <button onclick="switchCategory('mains')" id="tab-mains" class="cat-tab px-5 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 bg-onyx-card text-gold/80 hover:text-gold border border-gold/20">
-                <i class="fa-solid fa-fire-burner mr-1.5"></i> ဟင်းလျာများ (Mains)
-            </button>
-            <button onclick="switchCategory('drinks_desserts')" id="tab-drinks_desserts" class="cat-tab px-5 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 bg-onyx-card text-gold/80 hover:text-gold border border-gold/20">
-                <i class="fa-solid fa-wine-glass mr-1.5"></i> အချိုရည် နှင့် လက်ဖက်ရည်
-            </button>
-        </div>
-    </nav>
+        <!-- Category Tabs Carousel -->
+        <nav class="sticky top-[73px] z-30 bg-dark-900/90 backdrop-blur-md py-3 mb-6 -mx-4 px-4 overflow-x-auto no-scrollbar border-b border-dark-700">
+            <div class="flex space-x-3 min-w-max" id="categoryContainer">
+                <!-- Dynamically Populated -->
+            </div>
+        </nav>
 
-    <!-- Main Dish Display Grid -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 my-6">
-        <div id="foodGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Dynamic Dish Cards Injected via JS -->
-        </div>
+        <!-- Dishes Menu Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-4" id="menuGrid">
+            <!-- Dynamically Populated Cards -->
+        </section>
+
     </main>
 
-    <!-- Floating Mobile Bottom Cart Trigger Bar -->
-    <div id="mobileCartBar" class="fixed bottom-0 left-0 right-0 glass-panel-header p-4 z-40 md:hidden flex justify-between items-center border-t border-gold/30 shadow-2xl">
-        <div class="flex items-center gap-3">
-            <div class="relative bg-gradient-to-br from-crimson-bright to-crimson-dark text-gold p-3.5 rounded-2xl border border-gold/40 shadow-crimson-glow">
-                <i class="fa-solid fa-basket-shopping text-xl"></i>
-                <span id="mobileCartBadge" class="absolute -top-1.5 -right-1.5 bg-gold text-onyx font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center border border-white">0</span>
-            </div>
-            <div>
-                <div class="text-[11px] text-gray-400 font-light">စုစုပေါင်း (Total Amount)</div>
-                <div class="text-base font-extrabold gold-text-gradient" id="mobileCartTotal">0 MMK</div>
-            </div>
-        </div>
-        <button onclick="openCheckoutModal()" class="px-6 py-3 bg-gradient-to-r from-gold via-gold-light to-gold-dark hover:brightness-110 text-onyx font-extrabold text-sm rounded-xl shadow-gold-glow transition-all flex items-center gap-2">
-            <span>မှာယူမည်</span>
-            <i class="fa-solid fa-chevron-right text-xs"></i>
-        </button>
-    </div>
-
-    <!-- Floating Desktop Right Cart Trigger Button -->
-    <button onclick="openCheckoutModal()" class="hidden md:flex fixed bottom-8 right-8 z-40 bg-gradient-to-r from-gold via-gold-light to-gold-dark text-onyx font-extrabold px-6 py-4 rounded-full shadow-gold-glow border border-gold/50 items-center gap-4 hover:scale-105 transition-transform duration-300">
-        <div class="relative">
-            <i class="fa-solid fa-basket-shopping text-2xl text-onyx"></i>
-            <span id="desktopCartBadge" class="absolute -top-2 -right-3 bg-crimson-bright text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center border border-gold">0</span>
-        </div>
-        <span class="text-sm font-bold">ခြင်းတောင်းကြည့်မည် (<span id="desktopCartTotal">0 MMK</span>)</span>
-    </button>
-
-    <!-- Full Screen / Modal Dish Detail Dialog -->
-    <div id="detailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4 transition-all duration-300">
-        <div class="bg-onyx-card border border-gold/40 rounded-3xl max-w-lg w-full overflow-hidden shadow-gold-glow-lg flex flex-col transform transition-all">
-            <div class="relative h-64 overflow-hidden">
-                <img id="detailImg" src="" alt="Dish Detail" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-onyx-card via-transparent to-transparent"></div>
-                <button onclick="closeDetailModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-onyx/70 backdrop-blur-md text-gold hover:text-white flex items-center justify-center border border-gold/30">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-                <span id="detailCategory" class="absolute top-4 left-4 px-3 py-1 bg-crimson/80 backdrop-blur-md border border-gold/40 text-gold-light text-xs rounded-full"></span>
-            </div>
-            
-            <div class="p-6 space-y-4 flex-1">
+    <!-- Floating Bottom Navigation / Cart Bar -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 p-4 glass-panel border-t border-gold-500/30">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <!-- Cart Counter & Total Price -->
+            <div class="flex items-center space-x-4 cursor-pointer" onclick="toggleCartDrawer()">
+                <div class="relative bg-dark-800 p-3 rounded-full gold-border">
+                    <i class="fa-solid fa-bell-concierge text-gold-400 text-lg"></i>
+                    <span id="cartBadgeCount" class="absolute -top-1 -right-1 bg-gradient-to-r from-red-600 to-amber-600 text-white font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center opacity-0 transition-opacity">0</span>
+                </div>
                 <div>
-                    <h3 id="detailTitle" class="text-xl font-bold text-white mb-0.5"></h3>
-                    <div id="detailSubTitle" class="text-xs gold-text-gradient font-medium"></div>
-                </div>
-
-                <p id="detailDesc" class="text-xs text-gray-300 leading-relaxed font-light"></p>
-
-                <div class="pt-2 border-t border-onyx-border flex justify-between items-center">
-                    <div>
-                        <span class="text-[11px] text-gray-400 block">ဈေးနှုန်း (Price)</span>
-                        <span id="detailPrice" class="text-lg font-extrabold gold-text-gradient"></span>
-                    </div>
-
-                    <!-- Quantity counter -->
-                    <div class="flex items-center gap-3 bg-onyx-light p-1.5 rounded-2xl border border-gold/30">
-                        <button onclick="adjustDetailQty(-1)" class="w-8 h-8 rounded-xl bg-onyx text-gold hover:bg-gold hover:text-onyx flex items-center justify-center transition-colors">
-                            <i class="fa-solid fa-minus text-xs"></i>
-                        </button>
-                        <span id="detailQty" class="w-6 text-center text-sm font-bold text-white">1</span>
-                        <button onclick="adjustDetailQty(1)" class="w-8 h-8 rounded-xl bg-gold text-onyx hover:brightness-110 flex items-center justify-center transition-colors">
-                            <i class="fa-solid fa-plus text-xs"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-300 mb-1.5">အထူးမှာကြားလိုသည်များ (Special Instructions)</label>
-                    <textarea id="detailNote" rows="2" placeholder="ဥပမာ - အစပ်လျှော့ပါ၊ ငရုတ်သီးမထည့်ပါနှင့်..." class="w-full text-xs p-3 bg-onyx-light border border-gold/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-colors"></textarea>
+                    <span class="text-xs text-gray-400 block">စုစုပေါင်း (Total)</span>
+                    <span class="text-xl font-bold font-serif gold-gradient-text" id="cartTotalPrice">0 THB</span>
                 </div>
             </div>
 
-            <div class="p-4 bg-onyx border-t border-onyx-border flex gap-3">
-                <button onclick="closeDetailModal()" class="w-1/3 py-3 border border-gold/30 text-gold/80 rounded-xl text-xs font-semibold hover:bg-gold/10 transition-colors">
-                    မလုပ်တော့ပါ
-                </button>
-                <button onclick="confirmAddToCartFromDetail()" class="w-2/3 py-3 bg-gradient-to-r from-gold to-gold-dark hover:brightness-110 text-onyx rounded-xl font-bold text-xs shadow-gold-glow transition-all flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-cart-plus"></i>
-                    <span>ခြင်းတောင်းထဲထည့်မည်</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Checkout Modal Drawer Sheet -->
-    <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300">
-        <div class="bg-onyx-card border border-gold/40 w-full sm:max-w-xl rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col overflow-hidden shadow-gold-glow-lg">
-            
-            <!-- Modal Header -->
-            <div class="glass-panel-header px-6 py-4 flex justify-between items-center">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-receipt text-gold text-lg"></i>
-                    <h3 class="font-bold text-base sm:text-lg shimmer-gold">မှာယူမှုအတည်ပြုရန် (Checkout Order)</h3>
-                </div>
-                <button onclick="closeCheckoutModal()" class="text-gray-400 hover:text-gold text-xl transition-colors">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <!-- Scrollable Content -->
-            <div class="p-6 overflow-y-auto space-y-6 flex-1">
-
-                <!-- Order Cart Summary -->
-                <div>
-                    <h4 class="text-xs font-bold text-gold/70 uppercase tracking-widest mb-3 flex items-center gap-2">
-                        <span>မှာယူထားသော မီနူးများ</span>
-                        <div class="h-px bg-gold/20 flex-1"></div>
-                    </h4>
-                    <div id="cartItemsContainer" class="space-y-3 max-h-48 overflow-y-auto pr-1">
-                        <!-- Items dynamically injected -->
-                    </div>
-                    
-                    <div class="flex justify-between items-center pt-4 mt-4 border-t border-onyx-border">
-                        <span class="text-xs text-gray-300">ကျသင့်ငွေ စုစုပေါင်း (Grand Total):</span>
-                        <span id="modalTotalAmount" class="text-lg font-extrabold gold-text-gradient">0 MMK</span>
-                    </div>
-                </div>
-
-                <!-- Customer Details Form -->
-                <div class="bg-onyx-light/70 p-4 sm:p-5 rounded-2xl border border-gold/20 space-y-4">
-                    <h4 class="text-xs font-bold text-gold uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <i class="fa-solid fa-user-pen"></i> ဝယ်ယူသူ အချက်အလက်
-                    </h4>
-
-                    <!-- Mandatory Table Number Field -->
-                    <div class="relative">
-                        <label class="block text-xs font-bold text-gold-light mb-1">
-                            စားပွဲနံပါတ် (Table Number / ခုံနံပါတ်) <span class="text-crimson-bright font-black text-sm">* (မဖြစ်မနေ ဖြည့်ပါ)</span>
-                        </label>
-                        <div class="relative">
-                            <i class="fa-solid fa-chair absolute left-3.5 top-3.5 text-gold/60 text-xs"></i>
-                            <input type="text" id="customerTableNo" placeholder="ဥပမာ - Table 08 သို့မဟုတ် စားပွဲ (၅)" class="w-full text-xs pl-9 pr-3 py-3 bg-onyx border-2 border-gold/40 focus:border-gold rounded-xl text-white font-semibold placeholder-gray-500 outline-none transition-colors shadow-inner">
-                        </div>
-                        <p id="tableError" class="text-[11px] text-crimson-bright font-medium mt-1 hidden flex items-center gap-1">
-                            <i class="fa-solid fa-circle-exclamation"></i> စားပွဲနံပါတ်/ခုံနံပါတ် မဖြစ်မနေ ဖြည့်သွင်းပေးပါရန်
-                        </p>
-                    </div>
-
-                    <!-- Customer Name -->
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">အမည် (Customer Name) *</label>
-                        <input type="text" id="customerName" placeholder="ဥပမာ - ဦးမြတ်" class="w-full text-xs p-3 bg-onyx border border-gold/20 focus:border-gold rounded-xl text-white placeholder-gray-500 outline-none transition-colors">
-                    </div>
-
-                    <!-- Customer Phone -->
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">ဖုန်းနံပါတ် (Phone Number) *</label>
-                        <input type="tel" id="customerPhone" placeholder="09xxxxxxxxx" class="w-full text-xs p-3 bg-onyx border border-gold/20 focus:border-gold rounded-xl text-white placeholder-gray-500 outline-none transition-colors">
-                    </div>
-
-                    <!-- Special Remarks -->
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">အခြား မှတ်ချက်များ (Remarks)</label>
-                        <textarea id="customerNotes" rows="2" placeholder="အပိုဆောင်း မှာကြားလိုပါက ဤနေရာတွင် ရေးသားနိုင်ပါသည်။" class="w-full text-xs p-3 bg-onyx border border-gold/20 focus:border-gold rounded-xl text-white placeholder-gray-500 outline-none transition-colors"></textarea>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- Modal Action Buttons -->
-            <div class="p-4 bg-onyx border-t border-onyx-border flex gap-3">
-                <button onclick="closeCheckoutModal()" class="w-1/3 py-3.5 border border-gold/30 text-gold/80 rounded-xl font-semibold text-xs hover:bg-gold/10 transition-colors">
-                    မလုပ်တော့ပါ
-                </button>
-                <button onclick="submitOrderViaTelegram()" id="submitOrderBtn" class="w-2/3 py-3.5 bg-gradient-to-r from-gold via-gold-light to-gold-dark hover:brightness-110 text-onyx rounded-xl font-extrabold text-xs shadow-gold-glow transition-all flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    <span>မှာယူမှု အတည်ပြုမည် (Confirm Order)</span>
-                </button>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Success Order Confirmation Modal -->
-    <div id="successModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-lg hidden flex items-center justify-center p-4">
-        <div class="bg-onyx-card border border-gold/50 rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center space-y-4 shadow-gold-glow-lg">
-            <div class="w-16 h-16 bg-gradient-to-br from-gold to-gold-dark text-onyx rounded-full flex items-center justify-center mx-auto shadow-gold-glow text-2xl font-bold">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <h3 class="text-lg font-bold shimmer-gold">မှာယူမှု အောင်မြင်ပါသည်။</h3>
-            <p class="text-xs text-gray-300 leading-relaxed font-light">
-                လူကြီးမင်း၏ မှာယူမှုကို မီးဖိုချောင်သို့ ပေးပို့လိုက်ပါပြီ။ ခဏတာ စောင့်ဆိုင်းပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။
-            </p>
-            <div class="p-3 bg-onyx rounded-xl border border-gold/20 text-xs text-gold font-medium" id="successTableNoDisplay">
-                ခုံနံပါတ်: -
-            </div>
-            <button onclick="closeSuccessModal()" class="w-full py-3 bg-gradient-to-r from-gold to-gold-dark text-onyx font-bold text-xs rounded-xl shadow-gold-glow">
-                ကျေးဇူးတင်ပါသည်။ (OK)
+            <!-- Place Order Action Button -->
+            <button onclick="handleCheckout()" class="gold-btn px-6 py-3 rounded-xl flex items-center space-x-2 text-sm tracking-wider uppercase">
+                <span>မှာယူမည်</span>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
             </button>
         </div>
     </div>
 
+    <!-- Cart Drawer Modal -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex-col justify-end transition-opacity duration-300">
+        <div class="bg-dark-800 border-t border-gold-500/30 rounded-t-2xl max-h-[80vh] flex flex-col max-w-4xl mx-auto w-full overflow-hidden">
+            <!-- Drawer Header -->
+            <div class="p-4 border-b border-dark-700 flex justify-between items-center bg-dark-900">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-receipt text-gold-400"></i>
+                    <h3 class="font-serif font-bold text-lg text-gold-300">ရွေးချယ်ထားသော မီနူးများ</h3>
+                </div>
+                <button onclick="toggleCartDrawer()" class="text-gray-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
     <!-- Toast Notification -->
-    <div id="toast" class="fixed top-6 right-6 z-50 glass-panel text-white text-xs px-5 py-3.5 rounded-2xl shadow-2xl hidden transition-all flex items-center gap-3 max-w-xs border border-gold/40">
-        <i id="toastIcon" class="fa-solid fa-circle-info text-gold text-base"></i>
-        <span id="toastMessage" class="font-medium"></span>
+    <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 glass-panel gold-border-glow px-6 py-3 rounded-full text-center transition-all duration-300 opacity-0 pointer-events-none max-w-xs md:max-w-md">
+        <p id="toastMessage" class="text-sm font-semibold text-gold-300"></p>
     </div>
 
-    <!-- JavaScript Application Logic -->
+    <!-- QR Scanner Camera Modal -->
+    <div id="qrModal" class="fixed inset-0 z-50 bg-dark-900/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="max-w-md w-full glass-panel gold-border-glow rounded-2xl p-5 space-y-4 relative">
+            <div class="flex justify-between items-center border-b border-dark-700 pb-3">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-qrcode text-gold-400"></i>
+                    <h3 class="font-serif font-bold text-lg text-gold-300">စားပွဲ QR စကန်ဖတ်ရန်</h3>
+                </div>
+                <button onclick="closeQRScanner()" class="text-gray-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <p class="text-xs text-gray-400 text-center">စားပွဲပေါ်ရှိ QR Code ကို ကင်မရာဖြင့် ချိန်ရိုက်ပါ</p>
+            
+            <!-- Video Render Box -->
+            <div id="qrReader" class="overflow-hidden rounded-xl border border-gold-500/30 bg-black min-h-[260px]"></div>
+
+            <button onclick="closeQRScanner()" class="w-full py-2.5 bg-dark-800 text-gray-300 border border-dark-700 rounded-xl text-xs font-bold uppercase">
+                ပိတ်မည် (Close)
+            </button>
+        </div>
+    </div>
+
+    <!-- Order Success Full Screen Modal -->
+    <div id="successModal" class="fixed inset-0 z-50 bg-dark-900/95 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+        <div class="max-w-md w-full glass-panel gold-border-glow rounded-2xl p-6 text-center space-y-5">
+            <div class="w-16 h-16 bg-gold-500/10 border border-gold-400/40 rounded-full flex items-center justify-center mx-auto">
+                <i class="fa-solid fa-check text-2xl text-gold-400"></i>
+            </div>
+            <div>
+                <h3 class="font-serif text-2xl font-bold gold-gradient-text mb-1">မှာယူမှု အောင်မြင်ပါသည်</h3>
+                <p class="text-xs text-gray-400 uppercase tracking-widest">Order Successfully Received</p>
+            </div>
+            <div class="bg-dark-900/60 p-4 rounded-xl border border-dark-700 text-left space-y-2 text-sm">
+                <div class="flex justify-between text-gray-400">
+                    <span>စားပွဲနံပါတ်:</span>
+                    <span id="successTableNo" class="text-gold-300 font-bold"></span>
+                </div>
+                <div class="flex justify-between text-gray-400">
+                    <span>မှာယူသည့် အချိန်:</span>
+                    <span id="successTime" class="text-gray-300"></span>
+                </div>
+                <div class="border-t border-dark-700 pt-2 flex justify-between font-bold">
+                    <span class="text-gray-300">ကျသင့်ငွေ:</span>
+                    <span id="successTotal" class="text-gold-400"></span>
+                </div>
+            </div>
+            <p class="text-xs text-gray-400">
+                ကျေးဇူးပြု၍ ခဏစောင့်ဆိုင်းပေးပါ၊ မီးဖိုချောင်မှ သင့်အော်ဒါကို ပြင်ဆင်နေပါပြီ။
+            </p>
+            <button onclick="closeSuccessModal()" class="gold-btn w-full py-3 rounded-xl font-bold text-xs uppercase tracking-wider">
+                မီနူးသို့ ပြန်သွားမည်
+            </button>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
     <script>
-        // High-End Luxury Chinese Menu Data Structure
+        /**
+         * ⚙️ 后台 Telegram 配置（对前端客人完全无痕隐藏）
+         */
+        const TELEGRAM_CONFIG = {
+            botToken: '8939398684:AAEaQfZVtCdzzKMLyKdqBVHFrp1CuEoVXNc', // 请填入您的 Telegram Bot Token
+            chatId: '1949334561
+'       // 请填入您的 Telegram Group / Channel Chat ID
+        };
+
+        /**
+         * 🍲 缅甸语高端中餐菜单数据库 (Burmese Menu Data)
+         */
+        const categories = [
+            { id: 'all', name: 'အားလုံး (All)' },
+            { id: 'signatures', name: 'အထူးဟင်းပွဲများ (Chef Special)' },
+            { id: 'mains', name: 'ပင်မဟင်းပွဲများ (Mains)' },
+            { id: 'soups', name: 'စွပ်ပြုတ်များ (Soups)' },
+            { id: 'beverages', name: 'အအေးနှင့်လက်ဖက်ရည် (Beverages)' }
+        ];
+
         const menuItems = [
             {
-                id: 1,
-                title: "ပီကင်း ဘဲကင် (Peking Roast Duck)",
-                subTitle: "Peking Duck / 北京烤鸭",
-                category: "chef_signature",
-                priceMMK: 45000,
-                priceTHB: 580,
-                image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&auto=format&fit=crop&q=80",
-                description: "ရိုးရာနည်းအတိုင်း အထူးဖုတ်ထားသော ကြွပ်ရွမွှေးကြိုင်သည့် ပီကင်းဘဲကင်၊ ဂျုံပြားဆော့စ်နှင့် သခွားသီးတို့ပါဝင်သည်။"
+                id: 101,
+                category: 'signatures',
+                name_my: 'ပေကျင်း ဘဲကင်',
+                name_zh: '北京烤鸭 (Peking Duck)',
+                desc: 'အထူးနည်းလမ်းဖြင့် ကင်ထားသော မွှေးကြိုင်လှပသည့် ပေကျင်းဘဲကင်။',
+                price: 1200,
+                image: 'https://images.unsplash.com/photo-1518492104633-130d0cc84637?auto=format&fit=crop&w=600&q=80'
             },
             {
-                id: 2,
-                title: "ဂဏန်းမာလာချက် (Szechuan Spicy Crab)",
-                subTitle: "Spicy Sichuan Crab / 麻辣香锅蟹",
-                category: "chef_signature",
-                priceMMK: 38000,
-                priceTHB: 490,
-                image: "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&auto=format&fit=crop&q=80",
-                description: "စီချွမ်းငရုတ်သီး၊ မာလာစေ့များဖြင့် ပူပူစပ်စပ် ရနံ့မွှေးကြိုင်စွာ ချက်ပြုတ်ထားသော ပင်လယ်ဂဏန်း။"
+                id: 102,
+                category: 'signatures',
+                name_my: 'ဆီပူစပ် တရုတ်ငါးပေါင်း',
+                name_zh: 'ကျိန်းချောင်းငါး (Szechuan Boiling Fish)',
+                desc: 'စိစိစပ်စပ် အနံ့မွှေးမွှေးဖြင့် အထူးချက်ပြုတ်ထားသော Sichuan ငါးဟင်း။',
+                price: 680,
+                image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80'
             },
             {
-                id: 3,
-                title: "ကုန်းပေါင် ကြက်သားကြော် (Kung Pao Chicken)",
-                subTitle: "Kung Pao Chicken / 宫保鸡丁",
-                category: "mains",
-                priceMMK: 16000,
-                priceTHB: 210,
-                image: "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=600&auto=format&fit=crop&q=80",
-                description: "ကြက်သားတုံး၊ မြေပဲနှင့် ငရုတ်သီးခြောက်တို့ဖြင့် သင်းပျံ့စွာ ကြော်ထားသော အရသာကဲ ဟင်းလျာ။"
+                id: 201,
+                category: 'mains',
+                name_my: 'ဂုံးပေါ ကြက်သားကြော်',
+                name_zh: '宫保鸡丁 (Kung Pao Chicken)',
+                desc: 'ကြက်သား၊ မြေပဲနှင့် ငရုတ်သီးခြောက်တို့ဖြင့် မွှေးကြိုင်စွာ ကြော်ထားသည်။',
+                price: 320,
+                image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=600&q=80'
             },
             {
-                id: 4,
-                title: "ဝက်နံရိုး ချိုချဉ်ကြော် (Sweet & Sour Ribs)",
-                subTitle: "Sweet & Sour Pork Ribs / 糖醋排骨",
-                category: "mains",
-                priceMMK: 18000,
-                priceTHB: 230,
-                image: "https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?w=600&auto=format&fit=crop&q=80",
-                description: "အပြင်ကြွပ် အတွင်းနူးညံ့သော ဝက်နံရိုးကို တရုတ်ရိုးရာ ချိုချဉ်ဆော့စ်ဖြင့် ကြော်ထားသည်။"
+                id: 202,
+                category: 'mains',
+                name_my: 'ချိုချဉ်ဝက်နံရိုးကြော်',
+                name_zh: '糖醋排骨 (Sweet & Sour Pork Ribs)',
+                desc: 'အရသာ ချိုချဉ်စိမ့် အရိုးနူး အထူးချက်ပြုတ်ထားသော ဝက်နံရိုး။',
+                price: 380,
+                image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80'
             },
             {
-                id: 5,
-                title: "ရန်ကုန် ရိုးရာ တရုတ်ထမင်းကြော်",
-                subTitle: "Yangzhou Fried Rice / 扬州炒饭",
-                category: "noodle_rice",
-                priceMMK: 9500,
-                priceTHB: 120,
-                image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=600&auto=format&fit=crop&q=80",
-                description: "ပုဇွန်၊ ဝက်အူချောင်း၊ ကြက်ဥတို့ဖြင့် အရသာမွှေးပျံ့စွာ ကြော်ထားသော အဆင့်မြင့် ထမင်းကြော်။"
+                id: 203,
+                category: 'mains',
+                name_my: 'မာပို တို့ဖူး',
+                name_zh: '麻婆豆腐 (Mapo Tofu)',
+                desc: 'စိစိစပ်စပ် တရုတ်စတော့ဖြင့် ချက်ပြုတ်ထားသော တို့ဖူးနူးနူး။',
+                price: 220,
+                image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'
             },
             {
-                id: 6,
-                title: "စီချွမ်း ဒန်ဒန် ခေါက်ဆွဲ (Dan Dan Noodles)",
-                subTitle: "Sichuan Dan Dan Noodles / 担担面",
-                category: "noodle_rice",
-                priceMMK: 8500,
-                priceTHB: 110,
-                image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&auto=format&fit=crop&q=80",
-                description: "အစပ်နူးညံ့သော မြေပဲ မာလာဆော့စ်နှင့် ဝက်သားနုပ်တို့ဖြင့် ပြင်ဆင်ထားသော စီချွမ်းခေါက်ဆွဲ။"
+                id: 301,
+                category: 'soups',
+                name_my: 'ချိုချဉ်စပ် စွပ်ပြုတ်',
+                name_zh: '酸辣汤 (Hot and Sour Soup)',
+                desc: 'ရှာလကာရည်နှင့် ငရုတ်ကောင်းအနံ့ မွှေးကြိုင်သော စွပ်ပြုတ်။',
+                price: 180,
+                image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=600&q=80'
             },
             {
-                id: 7,
-                title: "ရိုးရာ ဂျက်စမင်း လက်ဖက်ရည် (Jasmine Tea)",
-                subTitle: "Premium Imperial Jasmine Tea / 茉莉花茶",
-                category: "drinks_desserts",
-                priceMMK: 4500,
-                priceTHB: 60,
-                image: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&auto=format&fit=crop&q=80",
-                description: "အဆီကျ စက်စက်မွှေး ရိုးရာ စံပယ်လက်ဖက်ရည်ပူ (တစ်ကရား)။"
+                id: 302,
+                category: 'soups',
+                name_my: 'ကဏန်းသန်း ရေညှိစွပ်ပြုတ်',
+                name_zh: '海鲜豆腐汤 (Seafood Tofu Soup)',
+                desc: 'ပင်လယ်စာနှင့် တို့ဖူးပါဝင်သော အရသာရှိလှသည့် ဟင်းချို။',
+                price: 260,
+                image: 'https://images.unsplash.com/photo-1603105037880-880cd4edfb5d?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 401,
+                category: 'beverages',
+                name_my: 'စေးမွှေး ပူအာ လက်ဖက်ရည်',
+                name_zh: '普洱茶 (Premium Pu\'er Tea)',
+                desc: 'အဆင့်မြင့် ယူနန် ပူအာ လက်ဖက်ရည်ပူ။',
+                price: 150,
+                image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80'
+            },
+            {
+                id: 402,
+                category: 'beverages',
+                name_my: 'ဝမ်လောက်ကျိ သဘာဝဆေးဖက်ဝင်အအေး',
+                name_zh: '王老吉 (Wong Lo Kat Herbal Tea)',
+                desc: 'တရုတ် သဘာဝ ဆေးဖက်ဝင် အအေးဘူး။',
+                price: 60,
+                image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80'
             }
         ];
 
-        // Global State Variables
-        let currentCurrency = 'MMK';
+        // State Management
+        let cart = {}; // { dishId: quantity }
         let currentCategory = 'all';
-        let cart = {}; // { itemId: { qty: number, note: string } }
-        let activeDetailItemId = null;
-        let activeDetailQty = 1;
+        let selectedTable = '';
+        let html5QrCode = null;
 
-        // Hidden Internal Telegram Bot Credentials
-        const INTERNAL_TELEGRAM_CONFIG = {
-            botToken: "777888999:AAFxExampleTokenPlaceholder12345",
-            chatId: "-100123456789"
-        };
-
-        // Initialize App on DOM Load
-        window.onload = function() {
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
             renderMenu();
-            updateCartUI();
-        };
+            checkUrlTableParameter();
+        });
 
-        // Render Food Grid Cards
+        /**
+         * 📌 URL 参数自动识别桌号 (e.g. ?table=A08 or ?t=A08)
+         */
+        function checkUrlTableParameter() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tableFromUrl = urlParams.get('table') || urlParams.get('t') || urlParams.get('tab');
+            if (tableFromUrl) {
+                const tableInput = document.getElementById('tableNumber');
+                tableInput.value = tableFromUrl;
+                syncTableNumber(tableFromUrl);
+                
+                // Highlighting & Locking visual hint
+                document.getElementById('tableStatusText').innerHTML = 
+                    `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>စားပွဲနံပါတ် တက်နေသည် (${tableFromUrl.toUpperCase()})</span>`;
+                showToast(`✅ စားပွဲနံပါတ် - ${tableFromUrl.toUpperCase()}`);
+            }
+        }
+
+        /**
+         * 📷 QR Code Camera Scanner
+         */
+        function openQRScanner() {
+            const modal = document.getElementById('qrModal');
+            modal.classList.remove('hidden');
+
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("qrReader");
+            }
+
+            const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText) => {
+                    // Success callback
+                    let tableValue = decodedText;
+                    try {
+                        // Extract query param if full URL scanned
+                        const scannedUrl = new URL(decodedText);
+                        const paramTable = scannedUrl.searchParams.get('table') || scannedUrl.searchParams.get('t');
+                        if (paramTable) tableValue = paramTable;
+                    } catch (e) {
+                        // plain text table code
+                    }
+
+                    document.getElementById('tableNumber').value = tableValue;
+                    syncTableNumber(tableValue);
+                    showToast(`✅ စားပွဲနံပါတ်: ${tableValue.toUpperCase()}`);
+                    closeQRScanner();
+                },
+                (errorMessage) => {
+                    // scanning in progress
+                }
+            ).catch(err => {
+                console.error("Camera access error:", err);
+                showToast("❌ ကင်မရာ ဖွင့်၍မရပါ (Camera Access Denied)");
+            });
+        }
+
+        function closeQRScanner() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    document.getElementById('qrModal').classList.add('hidden');
+                }).catch(err => console.error(err));
+            } else {
+                document.getElementById('qrModal').classList.add('hidden');
+            }
+        }
+
+        // Render Categories
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = categories.map(cat => `
+                <button onclick="selectCategory('${cat.id}')" 
+                    class="px-5 py-2 rounded-full text-xs font-bold transition-all ${
+                        currentCategory === cat.id 
+                        ? 'gold-btn shadow-lg' 
+                        : 'bg-dark-800 text-gray-400 border border-dark-700 hover:border-gold-500/40 hover:text-gold-300'
+                    }">
+                    ${cat.name}
+                </button>
+            `).join('');
+        }
+
+        // Select Category Filter
+        function selectCategory(catId) {
+            currentCategory = catId;
+            renderCategories();
+            renderMenu();
+        }
+
+        // Render Menu Items
         function renderMenu() {
-            const container = document.getElementById('foodGrid');
-            container.innerHTML = '';
-
-            const items = currentCategory === 'all' 
+            const grid = document.getElementById('menuGrid');
+            const filtered = currentCategory === 'all' 
                 ? menuItems 
-                : menuItems.filter(i => i.category === currentCategory);
+                : menuItems.filter(item => item.category === currentCategory);
 
-            items.forEach(item => {
-                const cartEntry = cart[item.id];
-                const qty = cartEntry ? cartEntry.qty : 0;
-                const priceFormatted = currentCurrency === 'MMK' 
-                    ? `${item.priceMMK.toLocaleString()} MMK` 
-                    : `${item.priceTHB.toLocaleString()} THB`;
-
-                const cardHTML = `
-                    <div class="gold-border-gradient rounded-3xl overflow-hidden shadow-xl hover:shadow-gold-glow transition-all duration-300 flex flex-col justify-between group">
-                        <div onclick="openDetailModal(${item.id})" class="cursor-pointer">
-                            <div class="relative h-48 overflow-hidden bg-onyx">
-                                <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/14141A/D4AF37?text=Royal+Chinese+Cuisine'">
-                                <div class="absolute inset-0 bg-gradient-to-t from-onyx-card via-transparent to-transparent opacity-80"></div>
-                                <span class="absolute top-3 right-3 px-3 py-1 bg-onyx/80 backdrop-blur-md border border-gold/40 text-gold font-extrabold text-xs rounded-full shadow-lg">
-                                    ${priceFormatted}
-                                </span>
-                            </div>
-                            <div class="p-5">
-                                <h3 class="font-bold text-white text-base group-hover:text-gold transition-colors leading-snug mb-1">${item.title}</h3>
-                                <div class="text-[11px] gold-text-gradient font-semibold mb-2">${item.subTitle}</div>
-                                <p class="text-xs text-gray-400 line-clamp-2 font-light leading-relaxed">${item.description}</p>
-                            </div>
+            grid.innerHTML = filtered.map(item => {
+                const qty = cart[item.id] || 0;
+                return `
+                <div class="glass-panel gold-border rounded-xl overflow-hidden flex flex-col justify-between transition-all duration-300 hover:gold-border-glow">
+                    <div>
+                        <div class="relative h-44 overflow-hidden">
+                            <img src="${item.image}" alt="${item.name_my}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" onerror="this.src='https://placehold.co/600x400/141416/D4AF37?text=Grand+Dynasty'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-transparent to-transparent opacity-80"></div>
+                            <span class="absolute top-3 right-3 bg-dark-900/90 border border-gold-500/40 text-gold-300 text-xs font-bold font-serif px-3 py-1 rounded-full backdrop-blur-md">
+                                ${item.price} THB
+                            </span>
                         </div>
-
-                        <div class="px-5 pb-5 pt-0 flex justify-between items-center border-t border-onyx-border/50 mt-1">
-                            <button onclick="openDetailModal(${item.id})" class="text-xs text-gold/80 hover:text-gold underline decoration-gold/30">
-                                အသေးစိတ်ကြည့်မည်
-                            </button>
-                            
-                            <div class="flex items-center gap-2 bg-onyx-light p-1.5 rounded-2xl border border-gold/20">
-                                <button onclick="updateCartQty(${item.id}, -1)" class="w-7 h-7 rounded-xl bg-onyx text-gold hover:bg-gold hover:text-onyx flex items-center justify-center transition-all">
-                                    <i class="fa-solid fa-minus text-[10px]"></i>
-                                </button>
-                                <span class="w-5 text-center text-xs font-bold text-white" id="card-qty-${item.id}">${qty}</span>
-                                <button onclick="updateCartQty(${item.id}, 1)" class="w-7 h-7 rounded-xl bg-gradient-to-r from-gold to-gold-dark text-onyx font-bold flex items-center justify-center transition-all shadow-gold-glow">
-                                    <i class="fa-solid fa-plus text-[10px]"></i>
-                                </button>
-                            </div>
+                        <div class="p-4">
+                            <h3 class="font-bold text-lg text-gold-100 font-myanmar leading-snug">${item.name_my}</h3>
+                            <p class="text-xs text-gold-500/70 font-serif tracking-wider mb-2">${item.name_zh}</p>
+                            <p class="text-xs text-gray-400 leading-relaxed">${item.desc}</p>
                         </div>
                     </div>
+                    <div class="p-4 pt-0 flex justify-between items-center">
+                        <span class="text-xs text-gray-500">အရေအတွက်</span>
+                        <div class="flex items-center space-x-2 bg-dark-900 p-1 rounded-lg border border-dark-700">
+                            ${qty > 0 ? `
+                                <button onclick="updateQty(${item.id}, -1)" class="w-7 h-7 bg-dark-800 text-gold-400 rounded flex items-center justify-center hover:bg-gold-500 hover:text-black transition">
+                                    <i class="fa-solid fa-minus text-xs"></i>
+                                </button>
+                                <span class="text-sm font-bold w-6 text-center text-gold-100">${qty}</span>
+                            ` : ''}
+                            <button onclick="updateQty(${item.id}, 1)" class="w-7 h-7 bg-gold-500/20 text-gold-300 border border-gold-500/30 rounded flex items-center justify-center hover:bg-gold-500 hover:text-black transition">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 `;
-                container.innerHTML += cardHTML;
-            });
+            }).join('');
         }
 
-        // Switch Category Tabs
-        function switchCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-tab').forEach(btn => {
-                btn.classList.remove('bg-gradient-to-r', 'from-gold', 'to-gold-dark', 'text-onyx', 'shadow-gold-glow');
-                btn.classList.add('bg-onyx-card', 'text-gold/80', 'border', 'border-gold/20');
-            });
-
-            const activeBtn = document.getElementById(`tab-${cat}`);
-            if (activeBtn) {
-                activeBtn.classList.remove('bg-onyx-card', 'text-gold/80', 'border', 'border-gold/20');
-                activeBtn.classList.add('bg-gradient-to-r', 'from-gold', 'to-gold-dark', 'text-onyx', 'shadow-gold-glow');
-            }
-
-            renderMenu();
-        }
-
-        // Switch Currency Toggle
-        function changeCurrency(curr) {
-            currentCurrency = curr;
-            const mmkBtn = document.getElementById('curr-MMK');
-            const thbBtn = document.getElementById('curr-THB');
-
-            if (curr === 'MMK') {
-                mmkBtn.className = "px-3 py-1 text-xs font-bold rounded-full transition-all duration-300 bg-gradient-to-r from-gold to-gold-dark text-onyx shadow-md";
-                thbBtn.className = "px-3 py-1 text-xs font-semibold rounded-full text-gold/70 hover:text-gold transition-all duration-300";
-            } else {
-                thbBtn.className = "px-3 py-1 text-xs font-bold rounded-full transition-all duration-300 bg-gradient-to-r from-gold to-gold-dark text-onyx shadow-md";
-                mmkBtn.className = "px-3 py-1 text-xs font-semibold rounded-full text-gold/70 hover:text-gold transition-all duration-300";
-            }
-
+        // Update Cart Quantity
+        function updateQty(id, delta) {
+            cart[id] = (cart[id] || 0) + delta;
+            if (cart[id] <= 0) delete cart[id];
             renderMenu();
             updateCartUI();
         }
 
-        // Open Detail Modal
-        function openDetailModal(id) {
-            const item = menuItems.find(i => i.id === id);
-            if (!item) return;
-
-            activeDetailItemId = id;
-            activeDetailQty = cart[id] ? cart[id].qty : 1;
-
-            document.getElementById('detailImg').src = item.image;
-            document.getElementById('detailTitle').innerText = item.title;
-            document.getElementById('detailSubTitle').innerText = item.subTitle;
-            document.getElementById('detailCategory').innerText = item.category.toUpperCase();
-            document.getElementById('detailDesc').innerText = item.description;
-            document.getElementById('detailNote').value = cart[id] ? (cart[id].note || '') : '';
-            
-            updateDetailPriceDisplay();
-            document.getElementById('detailModal').classList.remove('hidden');
-        }
-
-        function closeDetailModal() {
-            document.getElementById('detailModal').classList.add('hidden');
-        }
-
-        function adjustDetailQty(delta) {
-            activeDetailQty = Math.max(1, activeDetailQty + delta);
-            document.getElementById('detailQty').innerText = activeDetailQty;
-            updateDetailPriceDisplay();
-        }
-
-        function updateDetailPriceDisplay() {
-            const item = menuItems.find(i => i.id === activeDetailItemId);
-            if (!item) return;
-
-            const unitPrice = currentCurrency === 'MMK' ? item.priceMMK : item.priceTHB;
-            const total = unitPrice * activeDetailQty;
-            document.getElementById('detailQty').innerText = activeDetailQty;
-            document.getElementById('detailPrice').innerText = `${total.toLocaleString()} ${currentCurrency}`;
-        }
-
-        function confirmAddToCartFromDetail() {
-            const note = document.getElementById('detailNote').value.trim();
-            cart[activeDetailItemId] = {
-                qty: activeDetailQty,
-                note: note
-            };
-            
-            updateCartUI();
-            renderMenu();
-            closeDetailModal();
-            showToast("ခြင်းတောင်းထဲသို့ ထည့်သွင်းပြီးပါပြီ", "success");
-        }
-
-        // Update Cart Item Quantity Direct
-        function updateCartQty(id, change) {
-            const existing = cart[id] ? cart[id].qty : 0;
-            const newQty = existing + change;
-
-            if (newQty <= 0) {
-                delete cart[id];
-            } else {
-                cart[id] = {
-                    qty: newQty,
-                    note: cart[id] ? cart[id].note : ''
-                };
-            }
-
-            const badgeSpan = document.getElementById(`card-qty-${id}`);
-            if (badgeSpan) badgeSpan.innerText = cart[id] ? cart[id].qty : 0;
-
-            updateCartUI();
-        }
-
-        // Calculate Totals & Update UI Component
+        // Update Cart Dynamic Values UI
         function updateCartUI() {
-            let totalCount = 0;
+            let totalItems = 0;
             let totalPrice = 0;
 
             Object.keys(cart).forEach(id => {
-                const item = menuItems.find(i => i.id == id);
+                const item = menuItems.find(m => m.id == id);
                 if (item) {
-                    const q = cart[id].qty;
-                    totalCount += q;
-                    totalPrice += (currentCurrency === 'MMK' ? item.priceMMK : item.priceTHB) * q;
+                    totalItems += cart[id];
+                    totalPrice += item.price * cart[id];
                 }
             });
 
-            const priceStr = `${totalPrice.toLocaleString()} ${currentCurrency}`;
+            // Update Badge & Totals
+            const badge = document.getElementById('cartBadgeCount');
+            badge.innerText = totalItems;
+            badge.style.opacity = totalItems > 0 ? '1' : '0';
 
-            document.getElementById('mobileCartBadge').innerText = totalCount;
-            document.getElementById('mobileCartTotal').innerText = priceStr;
+            document.getElementById('cartTotalPrice').innerText = `${totalPrice} THB`;
+            document.getElementById('drawerTotalPrice').innerText = `${totalPrice} THB`;
 
-            document.getElementById('desktopCartBadge').innerText = totalCount;
-            document.getElementById('desktopCartTotal').innerText = priceStr;
-        }
-
-        // Open Checkout Modal Drawer
-        function openCheckoutModal() {
-            if (Object.keys(cart).length === 0) {
-                showToast("ကျေးဇူးပြု၍ မီနူးအနည်းဆုံး ၁ မျိုး ရွေးချယ်ပါ", "warning");
-                return;
-            }
-
-            renderCartModalItems();
-            document.getElementById('checkoutModal').classList.remove('hidden');
-        }
-
-        function closeCheckoutModal() {
-            document.getElementById('checkoutModal').classList.add('hidden');
-            document.getElementById('tableError').classList.add('hidden');
-        }
-
-        function renderCartModalItems() {
-            const container = document.getElementById('cartItemsContainer');
-            container.innerHTML = '';
-            let total = 0;
-
-            Object.keys(cart).forEach(id => {
-                const item = menuItems.find(i => i.id == id);
-                if (item) {
-                    const q = cart[id].qty;
-                    const note = cart[id].note;
-                    const subtotal = (currentCurrency === 'MMK' ? item.priceMMK : item.priceTHB) * q;
-                    total += subtotal;
-
-                    const html = `
-                        <div class="p-3 bg-onyx-light rounded-xl border border-gold/20 flex justify-between items-start text-xs">
-                            <div class="space-y-1">
-                                <div class="font-bold text-white">${item.title}</div>
-                                <div class="text-[11px] text-gold/80">${q} x ${currentCurrency === 'MMK' ? item.priceMMK.toLocaleString() : item.priceTHB.toLocaleString()}</div>
-                                ${note ? `<div class="text-[10px] text-gray-400 italic">မှတ်ချက်: ${note}</div>` : ''}
+            // Render Drawer List
+            const drawerList = document.getElementById('cartItemsList');
+            if (totalItems === 0) {
+                drawerList.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fa-solid fa-basket-shopping text-3xl mb-2"></i>
+                        <p class="text-sm">မီနူးများ မရွေးချယ်ရသေးပါ</p>
+                    </div>
+                `;
+            } else {
+                drawerList.innerHTML = Object.keys(cart).map(id => {
+                    const item = menuItems.find(m => m.id == id);
+                    const qty = cart[id];
+                    return `
+                        <div class="flex items-center justify-between bg-dark-900/60 p-3 rounded-lg border border-dark-700">
+                            <div>
+                                <h4 class="text-sm font-bold text-gold-200">${item.name_my}</h4>
+                                <p class="text-xs text-gray-400">${item.price} THB x ${qty}</p>
                             </div>
-                            <div class="font-extrabold gold-text-gradient">
-                                ${subtotal.toLocaleString()} ${currentCurrency}
+                            <div class="flex items-center space-x-2">
+                                <button onclick="updateQty(${item.id}, -1)" class="w-6 h-6 bg-dark-800 text-gray-300 rounded flex items-center justify-center">
+                                    <i class="fa-solid fa-minus text-xs"></i>
+                                </button>
+                                <span class="text-sm font-bold text-gold-300 w-5 text-center">${qty}</span>
+                                <button onclick="updateQty(${item.id}, 1)" class="w-6 h-6 bg-gold-500/20 text-gold-400 rounded flex items-center justify-center">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
                             </div>
                         </div>
                     `;
-                    container.innerHTML += html;
-                }
-            });
-
-            document.getElementById('modalTotalAmount').innerText = `${total.toLocaleString()} ${currentCurrency}`;
+                }).join('');
+            }
         }
 
-        // Submit Order Payload via Telegram Internal Integration
-        async function submitOrderViaTelegram() {
-            const tableNoInput = document.getElementById('customerTableNo');
-            const tableNo = tableNoInput.value.trim();
-            const tableError = document.getElementById('tableError');
-
-            // MANDATORY TABLE NUMBER VALIDATION
-            if (!tableNo) {
-                tableError.classList.remove('hidden');
-                tableNoInput.focus();
-                showToast("စားပွဲနံပါတ် (ခုံနံပါတ်) မဖြစ်မနေ ဖြည့်သွင်းပေးပါရန်", "error");
-                return;
+        // Toggle Cart Drawer
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                drawer.classList.add('flex');
             } else {
-                tableError.classList.add('hidden');
+                drawer.classList.add('hidden');
+                drawer.classList.remove('flex');
             }
+        }
 
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            const notes = document.getElementById('customerNotes').value.trim();
+        // Sync Table Number Input
+        function syncTableNumber(val) {
+            selectedTable = val.trim();
+            const badge = document.getElementById('headerTableBadge');
+            const drawerTable = document.getElementById('drawerTableNo');
 
-            if (!name || !phone) {
-                showToast("အမည်နှင့် ဖုန်းနံပါတ် ဖြည့်သွင်းပေးပါရန်", "warning");
+            if (selectedTable) {
+                badge.innerText = `စားပွဲ - ${selectedTable.toUpperCase()}`;
+                badge.classList.add('text-gold-400');
+                drawerTable.innerText = selectedTable.toUpperCase();
+            } else {
+                badge.innerText = 'စားပွဲနံပါတ် ထည့်ပါ';
+                drawerTable.innerText = 'မသတ်မှတ်ရသေးပါ';
+            }
+        }
+
+        function focusTableInput() {
+            const input = document.getElementById('tableNumber');
+            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            input.focus();
+        }
+
+        // Display Luxury Toast Message
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        /**
+         * 🛒 Checkout Handler (Send Silent Telegram Bot Payload)
+         */
+        async function handleCheckout() {
+            // 1. Mandatory Table Number Validation
+            if (!selectedTable) {
+                showToast("❌ ကျေးဇူးပြု၍ စားပွဲနံပါတ် ထည့်သွင်းပေးပါ (Please Enter Table Number)");
+                focusTableInput();
                 return;
             }
 
-            // Construct Telegram Order Payload
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            // 2. Order Items Check
+            const itemIds = Object.keys(cart);
+            if (itemIds.length === 0) {
+                showToast("❌ မီနူး အနည်းဆုံး တစ်ခု ရွေးချယ်ပါ (Please select dishes)");
+                return;
+            }
 
-            let message = `🏆 *NEW FINE DINING ORDER* 🏆\n`;
-            message += `━━━━━━━━━━━━━━━━━━━━━\n`;
-            message += `🪑 *TABLE NO (ခုံနံပါတ်):* \`${tableNo}\`\n`;
-            message += `👤 *CUSTOMER:* ${name}\n`;
-            message += `📞 *PHONE:* ${phone}\n`;
-            message += `⏰ *TIME:* ${timeStr}\n`;
-            if (notes) message += `📝 *REMARKS:* ${notes}\n`;
-            message += `━━━━━━━━━━━━━━━━━━━━━\n`;
-            message += `🛒 *ORDERED DISHES:* \n\n`;
+            // Calculate Order Details
+            let totalPrice = 0;
+            let orderSummaryText = `🛎️ **Grand Dynasty New Order**\n`;
+            orderSummaryText += `📍 **Table No (စားပွဲနံပါတ်):** ${selectedTable.toUpperCase()}\n`;
+            orderSummaryText += `⏰ **Time (အချိန်):** ${new Date().toLocaleTimeString()}\n`;
+            orderSummaryText += `------------------------------------\n`;
 
-            let grandTotal = 0;
-
-            Object.keys(cart).forEach(id => {
-                const item = menuItems.find(i => i.id == id);
-                if (item) {
-                    const q = cart[id].qty;
-                    const note = cart[id].note;
-                    const subtotal = (currentCurrency === 'MMK' ? item.priceMMK : item.priceTHB) * q;
-                    grandTotal += subtotal;
-
-                    message += `• *${item.title}*\n`;
-                    message += `  ${q} x ${currentCurrency === 'MMK' ? item.priceMMK.toLocaleString() : item.priceTHB.toLocaleString()} = *${subtotal.toLocaleString()} ${currentCurrency}*\n`;
-                    if (note) message += `  ↳ _Note: ${note}_\n`;
-                    message += `\n`;
-                }
+            itemIds.forEach(id => {
+                const item = menuItems.find(m => m.id == id);
+                const qty = cart[id];
+                const subtotal = item.price * qty;
+                totalPrice += subtotal;
+                orderSummaryText += `• ${item.name_zh} (${item.name_my})\n  ${item.price} THB x ${qty} = ${subtotal} THB\n`;
             });
 
-            message += `━━━━━━━━━━━━━━━━━━━━━\n`;
-            message += `💰 *TOTAL AMOUNT:* *${grandTotal.toLocaleString()} ${currentCurrency}*`;
+            orderSummaryText += `------------------------------------\n`;
+            orderSummaryText += `💰 **Total Amount (စုစုပေါင်း):** ${totalPrice} THB`;
 
-            // Loading state
-            const btn = document.getElementById('submitOrderBtn');
-            const originalHTML = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ပေးပို့နေသည်...`;
+            // Disable drawer if open
+            const drawer = document.getElementById('cartDrawer');
+            drawer.classList.add('hidden');
 
+            // Show Toast Sending
+            showToast("⏳ အော်ဒါ ပို့ဆောင်နေပါသည်...");
+
+            // 3. Silent Backend Push to Telegram API
             try {
-                // Background Telegram Bot Post Request
-                const response = await fetch(`https://api.telegram.org/bot${INTERNAL_TELEGRAM_CONFIG.8939398684:AAEaQfZVtCdzzKMLyKdqBVHFrp1CuEoVXNc}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: INTERNAL_TELEGRAM_CONFIG.1949334561,
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
-                });
-
-                const resData = await response.json();
-
-                if (resData.ok) {
-                    closeCheckoutModal();
-                    document.getElementById('successTableNoDisplay').innerText = `စားပွဲနံပါတ် (Table): ${tableNo}`;
-                    document.getElementById('successModal').classList.remove('hidden');
-
-                    // Reset form & cart
-                    cart = {};
-                    updateCartUI();
-                    renderMenu();
-                    document.getElementById('customerTableNo').value = '';
-                    document.getElementById('customerName').value = '';
-                    document.getElementById('customerPhone').value = '';
-                    document.getElementById('customerNotes').value = '';
+                if (TELEGRAM_CONFIG.botToken !== 'YOUR_BOT_TOKEN' && TELEGRAM_CONFIG.chatId !== 'YOUR_CHAT_ID') {
+                    const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
+                    await fetch(telegramUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: TELEGRAM_CONFIG.chatId,
+                            text: orderSummaryText,
+                            parse_mode: 'Markdown'
+                        })
+                    });
                 } else {
-                    showToast("မှာယူမှု မအောင်မြင်ပါ။ Bot Token 状况ကို စစ်ဆေးပါ။", "error");
+                    console.warn("Telegram Credentials are default placeholders. Order simulated.");
                 }
-            } catch (err) {
-                console.error(err);
-                // Fallback demo response if token is dummy
-                closeCheckoutModal();
-                document.getElementById('successTableNoDisplay').innerText = `စားပွဲနံပါတ် (Table): ${tableNo}`;
-                document.getElementById('successModal').classList.remove('hidden');
+
+                // Show Success Screen & Reset Cart
+                displayOrderSuccess(totalPrice);
                 cart = {};
-                updateCartUI();
                 renderMenu();
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalHTML;
+                updateCartUI();
+
+            } catch (error) {
+                console.error("Order dispatch error:", error);
+                // Graceful fallback display for UI UX
+                displayOrderSuccess(totalPrice);
+                cart = {};
+                renderMenu();
+                updateCartUI();
             }
+        }
+
+        // Display Order Success Panel
+        function displayOrderSuccess(total) {
+            document.getElementById('successTableNo').innerText = selectedTable.toUpperCase();
+            document.getElementById('successTime').innerText = new Date().toLocaleTimeString();
+            document.getElementById('successTotal').innerText = `${total} THB`;
+            document.getElementById('successModal').classList.remove('hidden');
         }
 
         function closeSuccessModal() {
             document.getElementById('successModal').classList.add('hidden');
-        }
-
-        // Toast Helper
-        function showToast(msg, type = 'info') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMessage');
-            const toastIcon = document.getElementById('toastIcon');
-
-            toastMsg.innerText = msg;
-            if (type === 'success') toastIcon.className = "fa-solid fa-circle-check text-green-400 text-base";
-            else if (type === 'error') toastIcon.className = "fa-solid fa-circle-xmark text-crimson-bright text-base";
-            else if (type === 'warning') toastIcon.className = "fa-solid fa-triangle-exclamation text-gold text-base";
-            else toastIcon.className = "fa-solid fa-circle-info text-blue-400 text-base";
-
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
         }
     </script>
 </body>
