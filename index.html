@@ -1,389 +1,775 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="my" class="h-full">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>အစားအသောက် မီနူး</title>
-<!-- 缅甸语 Unicode 字体（Noto Sans Myanmar 覆盖完整，Padauk 为备选） -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
-<!-- QR 码生成库：lean-qr（轻量、无依赖） -->
-<script src="https://cdn.jsdelivr.net/npm/lean-qr@2/dist/lean-qr.min.js"></script>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body {
-    font-family: 'Noto Sans Myanmar', 'Padauk', 'Myanmar3', sans-serif;
-    background: #faf7f2;
-    color: #2c2c2c;
-    min-height: 100vh;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chopsticks Palace - QR Order & TeleBot Menu</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Padauk for Burmese, Ma Shan Zheng & Noto Serif SC for Chinese -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@600;700&family=Padauk:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- QRCode library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-  /* 顶部餐厅信息 */
-  .header {
-    background: #1a1a1a;
-    color: #fff;
-    padding: 18px 16px 14px;
-    text-align: center;
-    position: sticky; top: 0; z-index: 50;
-  }
-  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
-  .header .table-badge {
-    display: inline-block;
-    margin-top: 6px;
-    background: #d4a24e;
-    color: #1a1a1a;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 3px 14px;
-    border-radius: 20px;
-  }
-
-  /* QR 码区（桌牌扫码用） */
-  .qr-section {
-    text-align: center;
-    padding: 16px 16px 8px;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-  }
-  .qr-section canvas, .qr-section svg {
-    width: 130px !important; height: 130px !important;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  }
-  .qr-section p { font-size: 11px; color: #999; margin-top: 6px; }
-
-  /* 分类标签 */
-  .tabs {
-    display: flex;
-    overflow-x: auto;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-    position: sticky; top: 86px; z-index: 40;
-    -ms-overflow-style: none; scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab {
-    flex: 0 0 auto;
-    padding: 12px 18px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #888;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-    font-family: inherit;
-  }
-  .tab.active { color: #1a1a1a; border-bottom-color: #d4a24e; }
-
-  /* 菜单列表 */
-  .menu-list { padding: 12px 14px 100px; }
-  .menu-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #fff;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-    transition: box-shadow 0.2s;
-  }
-  .menu-item:active { box-shadow: 0 0 0 2px #d4a24e; }
-  .item-info { flex: 1; min-width: 0; }
-  .item-name {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.45;
-    margin-bottom: 2px;
-  }
-  .item-desc {
-    font-size: 12px;
-    color: #888;
-    line-height: 1.4;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .item-price {
-    font-size: 15px;
-    font-weight: 700;
-    color: #c0392b;
-    white-space: nowrap;
-  }
-  .btn-order {
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: inherit;
-    transition: background 0.2s;
-  }
-  .btn-order:active { background: #d4a24e; color: #1a1a1a; }
-  .btn-order:disabled { background: #ccc; cursor: default; }
-
-  /* 底部提示条 */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: #1a1a1a;
-    color: #fff;
-    padding: 10px 22px;
-    border-radius: 24px;
-    font-size: 13px;
-    opacity: 0;
-    transition: transform 0.3s, opacity 0.3s;
-    z-index: 999;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cnRed: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                            950: '#450a0a',
+                        },
+                        cnGold: {
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                        },
+                        cnDark: '#120505',
+                    },
+                    fontFamily: {
+                        burmese: ['Padauk', 'sans-serif'],
+                        chinese: ['Ma Shan Zheng', 'Noto Serif SC', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Padauk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Traditional Chinese Aesthetic Touches */
+        .pattern-bg {
+            background-color: #1a0808;
+            background-image: radial-gradient(#d97706 0.75px, transparent 0.75px), radial-gradient(#d97706 0.75px, #120505 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0,15px 15px;
+            opacity: 0.98;
+        }
+        .chinese-border {
+            border: 2px solid #ca8a04;
+            box-shadow: 0 0 15px rgba(202, 138, 4, 0.25), inset 0 0 10px rgba(202, 138, 4, 0.15);
+        }
+        .text-glow {
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+        }
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-cnDark text-amber-50 font-burmese min-h-full flex flex-col antialiased selection:bg-cnRed-700 selection:text-cnGold-400 pattern-bg">
 
-<!-- 顶部 -->
-<div class="header">
-  <h1>ရွှေမြို့တော် စားသောက်ဆိုင်</h1>
-  <span class="table-badge">စားပွဲ အမှတ် — <span id="tableNum">?</span></span>
-</div>
+    <!-- Top Navigation / Header -->
+    <header class="sticky top-0 z-40 bg-cnDark/95 backdrop-blur-md border-b border-cnGold-600/40 shadow-xl">
+        <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cnRed-900 to-cnRed-600 border border-cnGold-400 flex items-center justify-center shadow-lg">
+                    <span class="font-chinese text-2xl text-cnGold-300">福</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-cnGold-400 tracking-wide leading-tight flex items-center gap-1.5">
+                        龍鳳酒樓 
+                        <span id="tableHeaderBadge" class="text-xs bg-cnRed-900/80 text-cnGold-300 px-2 py-0.5 rounded-full border border-cnGold-600/50">
+                            စားပွဲ <span id="currentTableNum">01</span>
+                        </span>
+                    </h1>
+                    <p class="text-xs text-amber-200/70">Chinese Luxury Cuisine</p>
+                </div>
+            </div>
 
-<!-- QR 码：桌牌扫码后显示此页 -->
-<div class="qr-section">
-  <div id="qrcode"></div>
-  <p>ဖုန်းဖြင့် စကန်ဖတ်၍ မီနူးကြည့်ပါ</p>
-</div>
+            <!-- Action buttons -->
+            <div class="flex items-center gap-2">
+                <!-- Admin Hidden Access Trigger: Double Click/Long Press Header Icon instead of prominent button -->
+                <button onclick="toggleModal('adminModal')" class="w-9 h-9 rounded-lg bg-cnRed-950/80 border border-cnGold-600/50 text-cnGold-400 hover:bg-cnRed-900 flex items-center justify-center transition opacity-60 hover:opacity-100" title="Admin TeleBot Backend">
+                    <i class="fa-solid fa-user-shield text-sm"></i>
+                </button>
+                <!-- Language Toggle -->
+                <button onclick="toggleLanguage()" class="h-9 px-2.5 text-xs rounded-lg bg-cnGold-600/20 border border-cnGold-500/40 text-cnGold-300 font-bold hover:bg-cnGold-600/30 transition flex items-center gap-1">
+                    <i class="fa-solid fa-globe"></i>
+                    <span id="langLabel">MY</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-<!-- 分类 -->
-<div class="tabs" id="tabs"></div>
+    <!-- Table Notice Banner -->
+    <div id="tableNotice" class="bg-gradient-to-r from-cnRed-900 via-amber-950 to-cnRed-900 border-b border-cnGold-600/30 px-4 py-1.5 text-center text-xs text-cnGold-300 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-qrcode text-cnGold-400"></i>
+        <span id="noticeText">စားပွဲအမှတ် (၁) မှ စကန်ဖတ်ထားပါသည်</span>
+    </div>
 
-<!-- 菜单 -->
-<div class="menu-list" id="menuList"></div>
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-md mx-auto w-full pb-28">
+        
+        <!-- Banner Carousel / Welcome Header -->
+        <div class="p-4">
+            <div class="relative rounded-2xl overflow-hidden chinese-border bg-gradient-to-r from-cnRed-950 to-amber-950 p-5 shadow-2xl">
+                <div class="absolute -right-6 -bottom-6 text-cnRed-900/40 text-9xl font-chinese select-none pointer-events-none">
+                    華
+                </div>
+                <div class="relative z-10">
+                    <span class="inline-block bg-cnGold-600/20 text-cnGold-400 border border-cnGold-500/40 text-[11px] px-2.5 py-0.5 rounded-full font-bold mb-2">
+                        <i class="fa-solid fa-fire text-red-500 mr-1"></i> Special Menu
+                    </span>
+                    <h2 class="text-xl font-bold text-white mb-1 tracking-wide" id="heroTitle">
+                        တရုတ်ရိုးရာ အကောင်းစား ဟင်းလျာများ
+                    </h2>
+                    <p class="text-xs text-amber-200/80 mb-3" id="heroSubtitle">
+                        လတ်ဆတ်သော ပါဝင်ပစ္စည်းများဖြင့် ချက်ပြုတ်ထားပါသည်။
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-cnGold-400">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-bolt"></i> မြန်ဆန်သော ဝန်ဆောင်မှု</span>
+                        <span>•</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-bell"></i> Telegram သို့ တိုက်ရိုက် ရောက်ရှိမည်</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!-- 轻提示 -->
-<div class="toast" id="toast"></div>
+        <!-- Category Horizontal Scroll Bar -->
+        <div class="sticky top-[61px] z-30 bg-cnDark/95 backdrop-blur-md py-2 px-4 border-b border-cnGold-600/30">
+            <div class="flex items-center space-x-2 overflow-x-auto scrollbar-none" id="categoryContainer">
+                <!-- Dynamically Populated -->
+            </div>
+        </div>
 
-<script>
-/* ============================================================
-   1. 配置区（只有这里需要改）
-   ============================================================ */
-const CONFIG = {
-  // Telegram Bot 配置 —— 这些不会显示在页面上
-  BOT_TOKEN: '8939398684:AAEaQfZVtCdzzKMLyKdqBVHFrp1CuEoVXNc',
-  CHAT_ID:   '1949334561',
+        <!-- Menu Dishes Grid -->
+        <div class="p-4 space-y-4" id="dishesList">
+            <!-- Dynamically Populated -->
+        </div>
+    </main>
 
-  // 餐厅信息
-  RESTAURANT: 'ရွှေမြို့တော် စားသောက်ဆိုင်',
+    <!-- Bottom Floating Cart Bar -->
+    <div id="cartBar" class="fixed bottom-0 left-0 right-0 z-40 max-w-md mx-auto p-4 pointer-events-none">
+        <div class="pointer-events-auto bg-gradient-to-r from-cnRed-950 via-cnRed-900 to-cnRed-950 rounded-2xl chinese-border p-3 shadow-2xl flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="toggleModal('cartModal')">
+                <div class="relative">
+                    <div class="w-12 h-12 rounded-xl bg-cnGold-500 text-cnDark flex items-center justify-center text-xl font-bold shadow-lg">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <span id="cartBadge" class="absolute -top-2 -right-2 bg-cnRed-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-cnDark">
+                        0
+                    </span>
+                </div>
+                <div>
+                    <div class="text-xs text-amber-200/70" id="totalLabel">စုစုပေါင်း ကျသင့်ငွေ</div>
+                    <div class="text-lg font-bold text-cnGold-300" id="cartTotalPrice">0 KS</div>
+                </div>
+            </div>
+            
+            <button onclick="toggleModal('cartModal')" class="bg-gradient-to-r from-cnGold-500 to-cnGold-600 text-cnDark font-bold px-5 py-2.5 rounded-xl text-sm shadow-md hover:brightness-110 active:scale-95 transition flex items-center gap-2">
+                <span id="viewCartText">မှာယူမည်</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </div>
+    </div>
 
-  // QR 码指向的菜单地址（部署后改成你的真实地址）
-  MENU_URL: window.location.href.split('?')[0]
-};
+    <!-- CART & CHECKOUT MODAL -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-end hidden transition-all duration-300">
+        <div class="bg-cnDark border-t-2 border-cnGold-500 w-full max-w-md rounded-t-3xl max-h-[85vh] flex flex-col shadow-2xl">
+            <!-- Modal Header -->
+            <div class="p-4 border-b border-amber-900/50 flex justify-between items-center bg-cnRed-950/60 rounded-t-3xl">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-cnGold-400 text-lg"></i>
+                    <h3 class="font-bold text-cnGold-300 text-lg" id="cartModalTitle">သင့်မှာယူမှု စာရင်း</h3>
+                </div>
+                <button onclick="toggleModal('cartModal')" class="text-amber-200/70 hover:text-white text-xl w-8 h-8 rounded-full flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-/* ============================================================
-   2. 菜单数据（缅甸语）
-   ============================================================ */
-const MENU = {
-  'ခေါက်ဆွဲ': {
-    label: 'ခေါက်ဆွဲ',
-    items: [
-      { id: 'm1', name: 'မုန့်ဟင်းခါး', desc: 'ငါးဖြင့် ချက်ထားသော ရှမ်းခေါက်ဆွဲ', price: 4500 },
-      { id: 'm2', name: 'အုန်းနို့ခေါက်ဆွဲ', desc: 'အုန်းနို့အရသာ ကြက်သားခေါက်ဆွဲ', price: 5000 },
-      { id: 'm3', name: 'ကြက်သားခေါက်ဆွဲ', desc: 'ပြုတ်ကြက်သား ခေါက်ဆွဲ', price: 5500 },
-      { id: 'm4', name: 'ဝက်သားခေါက်ဆွဲ', desc: 'ဝက်သားခြောက် ခေါက်ဆွဲ', price: 5000 },
-    ]
-  },
-  'ထမင်း': {
-    label: 'ထမင်း',
-    items: [
-      { id: 'r1', name: 'ကြက်သားထမင်း', desc: 'ကြက်သားကြော်၊ ထမင်းဖြူ၊ ဟင်းသီးဟင်းရွက်', price: 6000 },
-      { id: 'r2', name: 'ဝက်သားထမင်း', desc: 'ဝက်သားကြော်၊ ထမင်းဖြူ', price: 6500 },
-      { id: 'r3', name: 'ငါးထမင်း', desc: 'ငါးကြော်၊ ထမင်းဖြူ', price: 7000 },
-      { id: 'r4', name: 'သစ်သီးထမင်း', desc: 'အသီးအရွက်သုပ်နှင့် ထမင်း', price: 5000 },
-    ]
-  },
-  'ဟင်းရည်': {
-    label: 'ဟင်းရည်',
-    items: [
-      { id: 's1', name: 'ကြက်သားဟင်းရည်', desc: 'ကြက်သားပြုတ်ရည်', price: 3500 },
-      { id: 's2', name: 'ဝက်သားဟင်းရည်', desc: 'ဝက်သားပြုတ်ရည်', price: 4000 },
-      { id: 's3', name: 'ငါးဟင်းရည်', desc: 'ငါးချက်ရည်', price: 4500 },
-    ]
-  },
-  'အချိုရည်': {
-    label: 'အချိုရည်',
-    items: [
-      { id: 'd1', name: 'လက်ဖက်ရည်', desc: 'မြန်မာ့ရိုးရာ လက်ဖက်ရည်', price: 1500 },
-      { id: 'd2', name: 'ကော်ဖီ', desc: 'နို့ကော်ဖီ / ကော်ဖီအမဲ', price: 2000 },
-      { id: 'd3', name: 'သစ်သီးဖျော်ရည်', desc: 'လိမ္မော်သီး / သရက်သီး ဖျော်ရည်', price: 2500 },
-      { id: 'd4', name: 'ရေသန့်', desc: 'သန့်စင်ထားသော သောက်ရေ', price: 800 },
-    ]
-  }
-};
+            <!-- Items List -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-3" id="cartItemsContainer">
+                <!-- Cart items will be rendered here -->
+            </div>
 
-/* ============================================================
-   3. 工具函数
-   ============================================================ */
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.classList.remove('show'), 2200);
-}
+            <!-- Special Note Input -->
+            <div class="px-4 py-2">
+                <label class="block text-xs text-amber-200/80 mb-1" id="noteLabel">မှတ်ချက် (လိုလားချက်များ ရေးရန်):</label>
+                <input type="text" id="orderNote" placeholder="ဥပမာ- အစပ်လျှော့ပေးပါ..." class="w-full bg-cnRed-950/60 border border-cnGold-600/40 rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none focus:border-cnGold-400">
+            </div>
 
-function getTableNumber() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('table') || '—';
-}
+            <!-- Modal Footer / Submit Button -->
+            <div class="p-4 border-t border-amber-900/50 bg-cnDark space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-amber-200/80" id="totalCartLabel">စုစုပေါင်း ကျသင့်ငွေ:</span>
+                    <span class="text-xl font-bold text-cnGold-400" id="cartModalTotal">0 KS</span>
+                </div>
+                <button onclick="submitOrderToTelegram()" id="submitBtn" class="w-full bg-gradient-to-r from-cnRed-700 via-cnRed-600 to-cnRed-700 text-cnGold-300 font-bold py-3.5 rounded-xl shadow-lg border border-cnGold-500/50 hover:brightness-110 active:scale-98 transition flex items-center justify-center gap-2 text-base">
+                    <i class="fa-paper-plane"></i>
+                    <span id="sendOrderBtnText">Telegram သို့ မှာယူမှု ပေးပို့မည်</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
-/* ============================================================
-   4. QR 码生成（lean-qr）
-   ============================================================ */
-function renderQR() {
-  const container = document.getElementById('qrcode');
-  if (typeof leanQR === 'undefined') {
-    container.innerHTML = '<p style="font-size:12px;color:#aaa;">QR 库加载失败</p>';
-    return;
-  }
-  const table = getTableNumber();
-  const url = CONFIG.MENU_URL + (CONFIG.MENU_URL.includes('?') ? '&' : '?') + 'table=' + encodeURIComponent(table);
-  const qr = leanQR.generate(url, { minVersion: 5 });
-  const canvas = document.createElement('canvas');
-  qr.drawCanvas(canvas, 4); // 4 = 像素缩放
-  container.innerHTML = '';
-  container.appendChild(canvas);
-}
+    <!-- TELEGRAM BOT CONFIGURATION MODAL (Secret/Admin Settings) -->
+    <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4 hidden">
+        <div class="bg-cnDark border border-cnGold-500/60 w-full max-w-md rounded-2xl p-5 shadow-2xl relative">
+            <button onclick="toggleModal('adminModal')" class="absolute top-4 right-4 text-amber-200/70 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <div class="flex items-center gap-2 mb-4 text-cnGold-400 border-b border-cnGold-600/30 pb-3">
+                <i class="fa-brands fa-telegram text-2xl"></i>
+                <div>
+                    <h3 class="font-bold text-base">TeleBot 后台自动接单配置 (Backend Setup)</h3>
+                    <p class="text-[11px] text-amber-200/70">仅管理员可见，客户界面已自动隐藏此设置</p>
+                </div>
+            </div>
 
-/* ============================================================
-   5. 菜单渲染
-   ============================================================ */
-let activeCategory = Object.keys(MENU)[0];
+            <div class="space-y-4 text-xs">
+                <div>
+    <!-- TELEGRAM BOT & QR CODE ADMIN MODAL (Secret/Admin Settings) -->
+    <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-center items-center p-4 hidden">
+        <div class="bg-cnDark border border-cnGold-500/60 w-full max-w-md rounded-2xl p-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleModal('adminModal')" class="absolute top-4 right-4 text-amber-200/70 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <div class="flex items-center gap-2 mb-4 text-cnGold-400 border-b border-cnGold-600/30 pb-3">
+                <i class="fa-solid fa-user-shield text-2xl"></i>
+                <div>
+                    <h3 class="font-bold text-base">后台管理系统 (Backend System)</h3>
+                    <p class="text-[11px] text-amber-200/70">TeleBot 配置与桌号 QR 码生成器</p>
+                </div>
+            </div>
 
-function renderTabs() {
-  const tabsEl = document.getElementById('tabs');
-  tabsEl.innerHTML = '';
-  Object.keys(MENU).forEach(key => {
-    const btn = document.createElement('button');
-    btn.className = 'tab' + (key === activeCategory ? ' active' : '');
-    btn.textContent = MENU[key].label;
-    btn.onclick = () => {
-      activeCategory = key;
-      renderTabs();
-      renderMenu();
-    };
-    tabsEl.appendChild(btn);
-  });
-}
+            <div class="space-y-5 text-xs">
+                <!-- Section 1: Telegram Settings -->
+                <div class="space-y-3 bg-cnRed-950/40 p-3 rounded-xl border border-cnGold-600/20">
+                    <h4 class="font-bold text-cnGold-300 flex items-center gap-1.5 border-b border-amber-900/40 pb-1.5">
+                        <i class="fa-brands fa-telegram"></i> 1. Telegram Bot 自动推送配置
+                    </h4>
+                    <div>
+                        <label class="block text-amber-200/90 font-bold mb-1">Telegram Bot Token:</label>
+                        <input type="password" id="teleTokenInput" placeholder="e.g. 123456789:ABCdefGhIJKlmNoPQ..." class="w-full bg-cnRed-950/80 border border-cnGold-600/40 rounded-xl px-3 py-2 text-amber-100 focus:outline-none focus:border-cnGold-400 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-amber-200/90 font-bold mb-1">Telegram Chat ID / Group ID:</label>
+                        <input type="text" id="teleChatIdInput" placeholder="e.g. -100123456789 or 98765432" class="w-full bg-cnRed-950/80 border border-cnGold-600/40 rounded-xl px-3 py-2 text-amber-100 focus:outline-none focus:border-cnGold-400 font-mono">
+                    </div>
+                </div>
 
-function renderMenu() {
-  const listEl = document.getElementById('menuList');
-  const items = MENU[activeCategory].items;
-  listEl.innerHTML = '';
-  items.forEach(item => {
-    const row = document.createElement('div');
-    row.className = 'menu-item';
-    row.innerHTML = `
-      <div class="item-info">
-        <div class="item-name">${item.name}</div>
-        <div class="item-desc">${item.desc || ''}</div>
-      </div>
-      <div class="item-price">${item.price.toLocaleString()} Ks</div>
-      <button class="btn-order" data-id="${item.id}">မှာယူ</button>
-    `;
-    listEl.appendChild(row);
-  });
+                <!-- Section 2: QR Code Generator -->
+                <div class="space-y-3 bg-cnRed-950/40 p-3 rounded-xl border border-cnGold-600/20">
+                    <h4 class="font-bold text-cnGold-300 flex items-center gap-1.5 border-b border-amber-900/40 pb-1.5">
+                        <i class="fa-solid fa-qrcode"></i> 2. 桌面二维码生成 (Table QR Generator)
+                    </h4>
+                    <div>
+                        <label class="block text-amber-200/90 mb-1">选择桌号 (Select Table):</label>
+                        <select id="qrTableSelect" onchange="generateQrCode()" class="w-full bg-cnRed-950/80 border border-cnGold-600/40 rounded-xl px-3 py-2 text-amber-100 focus:outline-none focus:border-cnGold-400">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
 
-  // 绑定下单事件
-  listEl.querySelectorAll('.btn-order').forEach(btn => {
-    btn.onclick = () => handleOrder(btn.dataset.id, btn);
-  });
-}
+                    <!-- Generated QR Display -->
+                    <div class="bg-amber-50 p-4 rounded-xl flex flex-col items-center justify-center space-y-2 border-2 border-cnGold-500 shadow-inner mt-2">
+                        <div id="qrcodeCanvas" class="p-2 bg-white rounded-lg"></div>
+                        <p class="text-cnDark font-bold text-sm tracking-wide">စားပွဲအမှတ် - <span id="qrTableDisplayNum">01</span></p>
+                        <p class="text-gray-500 text-[10px]">Dragon Palace Chinese Restaurant</p>
+                    </div>
+                </div>
 
-/* ============================================================
-   6. Telegram Bot 下单（核心逻辑）
-   ============================================================ */
-async function handleOrder(itemId, btnEl) {
-  // 找到菜品
-  let item = null;
-  for (const cat of Object.values(MENU)) {
-    const found = cat.items.find(i => i.id === itemId);
-    if (found) { item = found; break; }
-  }
-  if (!item) return;
+                <button onclick="saveTeleConfig()" class="w-full bg-gradient-to-r from-cnGold-500 to-cnGold-600 text-cnDark font-bold py-3 rounded-xl hover:brightness-110 transition shadow-lg">
+                    保存后台设置 (Save Settings)
+                </button>
+            </div>
+        </div>
+    </div>
 
-  const table = getTableNumber();
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-cnGold-500 text-cnDark font-bold px-4 py-2.5 rounded-xl shadow-2xl border border-white/40 text-xs flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-sm"></i>
+        <span id="toastMsg">အောင်မြင်ပါသည်။</span>
+    </div>
 
-  // 如果 Token 未配置，只提示（不报错）
-  if (!CONFIG.BOT_TOKEN || CONFIG.BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE') {
-    toast('Bot မချိတ်ဆက်ရသေးပါ (Demo)');
-    return;
-  }
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // State Management
+        let currentLang = 'MY'; // 'MY' for Burmese, 'CN' for Chinese
+        let currentTable = '01';
+        let cart = {}; // { dishId: quantity }
+        
+        // Telegram Bot Defaults (Can be configured in Admin modal)
+        let teleBotToken = localStorage.getItem('tele_bot_token') || '';
+        let teleChatId = localStorage.getItem('tele_chat_id') || '';
 
-  // 按钮防重复点击
-  btnEl.disabled = true;
-  btnEl.textContent = 'ပို့နေသည်...';
+        // Category Translations
+        const categories = [
+            { id: 'all', nameMY: 'အားလုံး', nameCN: '全部' },
+            { id: 'signature', nameMY: 'အထူးဟင်းပွဲများ', nameCN: '招牌推荐' },
+            { id: 'dimsum', nameMY: 'ဒင်းဆန်း', nameCN: '精美点心' },
+            { id: 'mains', nameMY: 'ပင်မဟင်းလျာများ', nameCN: '热炒主菜' },
+            { id: 'soup', nameMY: 'စွပ်ပြုတ်နှင့် ခေါက်ဆွဲ', nameCN: '汤品面食' },
+            { id: 'drinks', nameMY: 'အဖျော်ယမကာ', nameCN: '酒水茶饮' }
+        ];
+        let activeCategory = 'all';
 
-  // 构建消息（缅甸语）
-  const lines = [
-    `🍽 ${CONFIG.RESTAURANT}`,
-    `🪑 စားပွဲ အမှတ်: ${table}`,
-    `———————————`,
-    `📋 မှာယူသည့် အစားအသောက်:`,
-    `• ${item.name} × 1`,
-    `💰 စျေးနှုန်း: ${item.price.toLocaleString()} Ks`,
-    `———————————`,
-    `🕐 ${new Date().toLocaleString('my-MM')}`
-  ].join('\n');
+        // Dishes Data (Chinese Cuisine)
+        const dishes = [
+            {
+                id: 'd1',
+                category: 'signature',
+                nameMY: 'ပေကျင်း ဘဲကင်',
+                nameCN: '北京烤鸭 (Peking Duck)',
+                descMY: 'ရိုးရာ စုတ်ချက်ဖြင့် ကင်ထားသော သားရေကျွတ် ပေကျင်း ဘဲကင်',
+                descCN: '皮酥肉嫩，搭配薄饼与甜面酱',
+                price: 45000,
+                image: 'https://images.unsplash.com/photo-1518492104633-130d0cc84637?auto=format&fit=crop&w=400&q=80',
+                spicy: false,
+                popular: true
+            },
+            {
+                id: 'd2',
+                category: 'signature',
+                nameMY: 'စိချွမ်း မာလာငါးပေါင်း',
+                nameCN: '四川麻辣水煮鱼',
+                descMY: 'စိချွမ်း ငရုတ်သီး နှင့် မာလာစေ့ အနံ့မွှေးမွှေး စပ်စပ်',
+                descCN: '麻辣鲜香，鱼肉滑嫩',
+                price: 28000,
+                image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=400&q=80',
+                spicy: true,
+                popular: true
+            },
+            {
+                id: 'd3',
+                category: 'dimsum',
+                nameMY: 'ရှောင်းလုံပေါက် (စွပ်ပြုတ်ပေါက်စီ)',
+                nameCN: '上海小笼包 (Xiaolongbao)',
+                descMY: 'အသားနှင့် စွပ်ပြုတ်ရည် ပူပူလေး ပါဝင်သော ဒင်းဆန်း',
+                descCN: '汤汁丰富，鲜美可口',
+                price: 9000,
+                image: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=400&q=80',
+                spicy: false,
+                popular: true
+            },
+            {
+                id: 'd4',
+                category: 'dimsum',
+                nameMY: 'ဟာเกာ (ပုစွန်ပေါင်း)',
+                nameCN: '水晶虾饺 (Har Gow)',
+                descMY: 'ကြည်လင်သော မုန့်သားဖြင့် ပုစွန် အကောင်လိုက် ပေါင်း',
+                descCN: '晶莹剔透，全虾包裹',
+                price: 10500,
+                image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=400&q=80',
+                spicy: false,
+                popular: false
+            },
+            {
+                id: 'd5',
+                category: 'mains',
+                nameMY: 'မိုဖိုတိုဖူး (ဝက်သားနှပ် တိုဖူး)',
+                nameCN: '麻婆豆腐 (Mapo Tofu)',
+                descMY: 'စိချွမ်း စတိုင် မာလာဝက်သား စပ်စပ် တိုဖူး',
+                descCN: '麻辣烫鲜香嫩',
+                price: 12000,
+                image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80',
+                spicy: true,
+                popular: false
+            },
+            {
+                id: 'd6',
+                category: 'mains',
+                nameMY: 'ကုန်းပေါင် ကြက်သားကြော်',
+                nameCN: '宫保鸡丁 (Kung Pao Chicken)',
+                descMY: 'မြေပဲနှင့် ငရုတ်သီး အခြောက်ကြော် ကြက်သား',
+                descCN: '甜辣鲜香，鸡肉嫩滑',
+                price: 16000,
+                image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=400&q=80',
+                spicy: true,
+                popular: true
+            },
+            {
+                id: 'd7',
+                category: 'soup',
+                nameMY: 'လာမြန့် ဝက်သားခေါက်ဆွဲ',
+                nameCN: '兰州拉面 (Lanzhou Ramen)',
+                descMY: 'လက်ဆွဲ ခေါက်ဆွဲနှင့် အမဲသား သို့မဟုတ် ဝက်သား စွပ်ပြုတ်',
+                descCN: '汤清肉香，手拉面条劲道',
+                price: 13500,
+                image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=400&q=80',
+                spicy: false,
+                popular: true
+            },
+            {
+                id: 'd8',
+                category: 'drinks',
+                nameMY: 'တရုတ် ဂျင်းဖော် လက်ဖက်ရည်',
+                nameCN: '普洱大红袍热茶 (Puer Tea)',
+                descMY: 'အဆီကျစေသော ရိုးရာ တရုတ် လက်ဖက်ရည်ပူ',
+                descCN: '暖胃解腻，醇香回甘',
+                price: 5000,
+                image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=400&q=80',
+                spicy: false,
+                popular: false
+            }
+        ];
 
-  const url = `https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`;
+        // Initialization
+        window.onload = function() {
+            // Check table number from URL params (e.g. ?table=05)
+            const urlParams = new URLSearchParams(window.location.search);
+            const tableParam = urlParams.get('table');
+            if(tableParam) {
+                currentTable = tableParam.padStart(2, '0');
+            }
+            document.getElementById('currentTableNum').innerText = currentTable;
 
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: CONFIG.CHAT_ID,
-        text: lines,
-        parse_mode: 'HTML'
-      })
-    });
+            // Populate Admin Inputs if existing
+            document.getElementById('teleTokenInput').value = teleBotToken;
+            document.getElementById('teleChatIdInput').value = teleChatId;
 
-    const data = await res.json();
+            // Render Page Components
+            renderCategories();
+            renderDishes();
+            updateNoticeText();
+            populateQrTableSelect();
+        };
 
-    if (data.ok) {
-      toast('✅ အော်ဒါ ပို့ပြီးပါပြီ');
-      btnEl.textContent = 'ပို့ပြီး';
-    } else {
-      console.error('Telegram error:', data);
-      toast('❌ ပို့မရပါ၊ ထပ်ကြိုးစားပါ');
-      btnEl.disabled = false;
-      btnEl.textContent = 'မှာယူ';
-    }
-  } catch (err) {
-    console.error(err);
-    toast('❌ ကွန်ရက် အမှား');
-    btnEl.disabled = false;
-    btnEl.textContent = 'မှာယူ';
-  }
-}
+        // Render Categories Bar
+        function renderCategories() {
+            const container = document.getElementById('categoryContainer');
+            container.innerHTML = categories.map(cat => {
+                const isActive = activeCategory === cat.id;
+                const name = currentLang === 'MY' ? cat.nameMY : cat.nameCN;
+                return `
+                    <button onclick="setCategory('${cat.id}')" 
+                        class="whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                            isActive 
+                            ? 'bg-gradient-to-r from-cnRed-700 to-cnRed-900 text-cnGold-300 border border-cnGold-500/60 shadow-lg' 
+                            : 'bg-cnRed-950/40 text-amber-200/70 border border-cnGold-600/20 hover:text-cnGold-300'
+                        }">
+                        ${name}
+                    </button>
+                `;
+            }).join('');
+        }
 
-/* ============================================================
-   7. 初始化
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('tableNum').textContent = getTableNumber();
-  renderQR();
-  renderTabs();
-  renderMenu();
-});
-</script>
+        // Set Category Filter
+        function setCategory(catId) {
+            activeCategory = catId;
+            renderCategories();
+            renderDishes();
+        }
+
+        // Render Dishes List
+        function renderDishes() {
+            const container = document.getElementById('dishesList');
+            const filteredDishes = activeCategory === 'all' 
+                ? dishes 
+                : dishes.filter(d => d.category === activeCategory);
+
+            container.innerHTML = filteredDishes.map(dish => {
+                const qty = cart[dish.id] || 0;
+                const name = currentLang === 'MY' ? dish.nameMY : dish.nameCN;
+                const desc = currentLang === 'MY' ? dish.descMY : dish.descCN;
+
+                return `
+                    <div class="bg-gradient-to-br from-cnRed-950/80 to-cnDark border border-cnGold-600/30 rounded-2xl p-3 flex gap-3 shadow-md relative overflow-hidden">
+                        <!-- Dish Image -->
+                        <div class="relative w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 border border-cnGold-600/30">
+                            <img src="${dish.image}" alt="${name}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/200x200/3a0000/ffd700?text=Food'">
+                            ${dish.popular ? `<span class="absolute top-1 left-1 bg-cnRed-700 text-cnGold-300 text-[9px] px-1.5 py-0.5 rounded-md font-bold border border-cnGold-500/50">TOP</span>` : ''}
+                        </div>
+
+                        <!-- Details -->
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-start justify-between">
+                                    <h3 class="font-bold text-sm text-amber-100 leading-snug">${name}</h3>
+                                    ${dish.spicy ? `<span class="text-red-500 text-xs ml-1" title="Spicy"><i class="fa-solid fa-pepper-hot"></i></span>` : ''}
+                                </div>
+                                <p class="text-[11px] text-amber-200/60 line-clamp-2 mt-1 leading-relaxed">${desc}</p>
+                            </div>
+
+                            <!-- Price & Quantity Control -->
+                            <div class="flex items-center justify-between mt-2 pt-1 border-t border-amber-900/30">
+                                <span class="text-sm font-bold text-cnGold-400">${dish.price.toLocaleString()} KS</span>
+                                
+                                <div class="flex items-center space-x-2">
+                                    ${qty > 0 ? `
+                                        <button onclick="updateQty('${dish.id}', -1)" class="w-7 h-7 rounded-lg bg-cnRed-950 border border-cnGold-600/50 text-cnGold-400 flex items-center justify-center active:scale-90 transition">
+                                            <i class="fa-solid fa-minus text-xs"></i>
+                                        </button>
+                                        <span class="text-xs font-bold text-amber-100 w-4 text-center">${qty}</span>
+                                    ` : ''}
+                                    <button onclick="updateQty('${dish.id}', 1)" class="w-7 h-7 rounded-lg bg-gradient-to-r from-cnGold-500 to-cnGold-600 text-cnDark font-bold flex items-center justify-center active:scale-90 transition shadow-md">
+                                        <i class="fa-solid fa-plus text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Quantity Cart Update
+        function updateQty(dishId, delta) {
+            cart[dishId] = (cart[dishId] || 0) + delta;
+            if (cart[dishId] <= 0) {
+                delete cart[dishId];
+            }
+            renderDishes();
+            updateCartSummary();
+        }
+
+        // Update Cart Floating Bar Stats
+        function updateCartSummary() {
+            const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
+            let totalPrice = 0;
+            
+            for (let id in cart) {
+                const dish = dishes.find(d => d.id === id);
+                if (dish) {
+                    totalPrice += dish.price * cart[id];
+                }
+            }
+
+            document.getElementById('cartBadge').innerText = totalItems;
+            document.getElementById('cartTotalPrice').innerText = totalPrice.toLocaleString() + ' KS';
+            document.getElementById('cartModalTotal').innerText = totalPrice.toLocaleString() + ' KS';
+
+            const cartBar = document.getElementById('cartBar');
+            if (totalItems > 0) {
+                cartBar.classList.remove('translate-y-full', 'opacity-0');
+            } else {
+                // Keep visible but reset
+            }
+        }
+
+        // Render Items inside Modal
+        function renderCartModalItems() {
+            const container = document.getElementById('cartItemsContainer');
+            const cartKeys = Object.keys(cart);
+
+            if (cartKeys.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-amber-200/50 text-xs">
+                        <i class="fa-solid fa-basket-shopping text-3xl mb-2 text-amber-900"></i>
+                        <p>${currentLang === 'MY' ? 'မှာယူထားသော ဟင်းပွဲ မရှိသေးပါ။' : '暂无已点菜品'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cartKeys.map(id => {
+                const dish = dishes.find(d => d.id === id);
+                const qty = cart[id];
+                const itemTotal = dish.price * qty;
+                const name = currentLang === 'MY' ? dish.nameMY : dish.nameCN;
+
+                return `
+                    <div class="flex items-center justify-between bg-cnRed-950/40 border border-cnGold-600/20 rounded-xl p-2.5">
+                        <div class="flex-1 pr-2">
+                            <h4 class="text-xs font-bold text-amber-100">${name}</h4>
+                            <div class="text-[11px] text-cnGold-400 mt-0.5">${dish.price.toLocaleString()} KS × ${qty}</div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xs font-bold text-amber-200">${itemTotal.toLocaleString()} KS</span>
+                            <div class="flex items-center space-x-1.5">
+                                <button onclick="updateQty('${dish.id}', -1); renderCartModalItems();" class="w-6 h-6 rounded-md bg-cnRed-900 border border-cnGold-600/40 text-cnGold-300 text-xs flex items-center justify-center">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <span class="text-xs font-bold text-amber-100 w-4 text-center">${qty}</span>
+                                <button onclick="updateQty('${dish.id}', 1); renderCartModalItems();" class="w-6 h-6 rounded-md bg-cnGold-600 text-cnDark text-xs font-bold flex items-center justify-center">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle Modals
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('hidden')) {
+                if (modalId === 'cartModal') renderCartModalItems();
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Submit Order to Telegram Bot
+        async function submitOrderToTelegram() {
+            const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
+            if (totalItems === 0) {
+                showToast(currentLang === 'MY' ? 'ကျေးဇူးပြု၍ ဟင်းပွဲ အရင်ရွေးချယ်ပါ' : '请先选择菜品');
+                return;
+            }
+
+            if (!teleBotToken || !teleChatId) {
+                showToast('Telegram Bot မချိတ်ဆက်ရသေးပါ။ ဆက်တင်တွင် ထည့်သွင်းပါ။');
+                toggleModal('cartModal');
+                toggleModal('adminModal');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>ပေးပို့နေပါသည်...</span>`;
+
+            // Prepare Order Summary
+            let orderText = `🔔 *အမှာစာအသစ် ရောက်ရှိပါသည်။ (NEW ORDER)*\n`;
+            orderText += `━━━━━━━━━━━━━━━━━━━\n`;
+            orderText += `🪑 *စားပွဲအမှတ် (Table):* #${currentTable}\n`;
+            orderText += `⏰ *အချိန် (Time):* ${new Date().toLocaleTimeString()}\n`;
+            orderText += `━━━━━━━━━━━━━━━━━━━\n\n`;
+            orderText += `🍲 *မှာယူထားသော ဟင်းပွဲများ:* \n`;
+
+            let totalPrice = 0;
+            for (let id in cart) {
+                const dish = dishes.find(d => d.id === id);
+                const qty = cart[id];
+                const cost = dish.price * qty;
+                totalPrice += cost;
+                orderText += `• ${dish.nameCN} (${dish.nameMY}) × ${qty} = ${cost.toLocaleString()} KS\n`;
+            }
+
+            const note = document.getElementById('orderNote').value.trim();
+            if (note) {
+                orderText += `\n📝 *မှတ်ချက် (Note):* ${note}\n`;
+            }
+
+            orderText += `\n💰 *စုစုပေါင်း ကျသင့်ငွေ:* *${totalPrice.toLocaleString()} KS*`;
+
+            // Send via Telegram Bot API
+            const url = `https://api.telegram.org/bot${teleBotToken}/sendMessage`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: teleChatId,
+                        text: orderText,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.ok) {
+                    showToast(currentLang === 'MY' ? 'မှာယူမှု အောင်မြင်ပါသည်။ Telegram သို့ ပေးပို့လိုက်ပါပြီ!' : '点餐成功！已发送至Telegram');
+                    cart = {}; // Reset cart
+                    document.getElementById('orderNote').value = '';
+                    renderDishes();
+                    updateCartSummary();
+                    toggleModal('cartModal');
+                } else {
+                    showToast('Telegram ပေးပို့မှု မအောင်မြင်ပါ: ' + (data.description || 'Error'));
+                }
+            } catch (err) {
+                showToast('ကွန်ရက် ချို့ယွင်းချက် ဖြစ်ပေါ်နေပါသည်။');
+                console.error(err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-paper-plane"></i> <span>${currentLang === 'MY' ? 'Telegram သို့ မှာယူမှု ပေးပို့မည်' : '发送订单至 Telegram'}</span>`;
+            }
+        }
+
+        // Save TeleBot Configuration
+        function saveTeleConfig() {
+            teleBotToken = document.getElementById('teleTokenInput').value.trim();
+            teleChatId = document.getElementById('teleChatIdInput').value.trim();
+
+            localStorage.setItem('tele_bot_token', teleBotToken);
+            localStorage.setItem('tele_chat_id', teleChatId);
+
+            showToast('TeleBot ဆက်တင်များ သိမ်းဆည်းပြီးပါပြီ!');
+            toggleModal('adminModal');
+        }
+
+        // Language Toggle Functionality
+        function toggleLanguage() {
+            currentLang = currentLang === 'MY' ? 'CN' : 'MY';
+            document.getElementById('langLabel').innerText = currentLang;
+
+            // UI Texts
+            document.getElementById('heroTitle').innerText = currentLang === 'MY' ? 'တရုတ်ရိုးရာ အကောင်းစား ဟင်းလျာများ' : '中华传统宫廷美食';
+            document.getElementById('heroSubtitle').innerText = currentLang === 'MY' ? 'လတ်ဆတ်သော ပါဝင်ပစ္စည်းများဖြင့် ချက်ပြုတ်ထားပါသည်။' : '严选新鲜食材，传承千年匠心';
+            document.getElementById('totalLabel').innerText = currentLang === 'MY' ? 'စုစုပေါင်း ကျသင့်ငွေ' : '合计金额';
+            document.getElementById('viewCartText').innerText = currentLang === 'MY' ? 'မှာယူမည်' : '去结算';
+            document.getElementById('cartModalTitle').innerText = currentLang === 'MY' ? 'သင့်မှာယူမှု စာရင်း' : '您的点菜清单';
+            document.getElementById('noteLabel').innerText = currentLang === 'MY' ? 'မှတ်ချက် (လိုလားချက်များ ရေးရန်):' : '备注要求 (如：少辣、不要香菜)';
+            document.getElementById('totalCartLabel').innerText = currentLang === 'MY' ? 'စုစုပေါင်း ကျသင့်ငွေ:' : '应付总额:';
+            document.getElementById('sendOrderBtnText').innerText = currentLang === 'MY' ? 'Telegram သို့ မှာယူမှု ပေးပို့မည်' : '发送订单至 Telegram';
+
+            updateNoticeText();
+            renderCategories();
+            renderDishes();
+        }
+
+        function updateNoticeText() {
+            document.getElementById('noticeText').innerText = currentLang === 'MY' 
+                ? `စားပွဲအမှတ် (${currentTable}) မှ စကန်ဖတ်ထားပါသည်` 
+                : `已识别桌号 (${currentTable})`;
+        }
+
+        // Populate Table Numbers for QR Generation
+        function populateQrTableSelect() {
+            const select = document.getElementById('qrTableSelect');
+            let html = '';
+            for(let i=1; i<=20; i++) {
+                const num = String(i).padStart(2, '0');
+                html += `<option value="${num}">စားပွဲ ${num} (Table ${num})</option>`;
+            }
+            select.innerHTML = html;
+            generateQrCode();
+        }
+
+        // Generate Table QR Code
+        function generateQrCode() {
+            const selectedTable = document.getElementById('qrTableSelect').value;
+            document.getElementById('qrTableDisplayNum').innerText = selectedTable;
+            
+            const qrContainer = document.getElementById('qrcodeCanvas');
+            qrContainer.innerHTML = '';
+
+            // Clean URL without menu clutter - just pointing to the web app with table parameter
+            const currentBaseUrl = window.location.href.split('?')[0];
+            const qrTargetUrl = `${currentBaseUrl}?table=${selectedTable}`;
+
+            new QRCode(qrContainer, {
+                text: qrTargetUrl,
+                width: 150,
+                height: 150,
+                colorDark: "#450a0a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // Toast Notification Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
