@@ -258,11 +258,11 @@
                     </h4>
                     <div>
                         <label class="block text-amber-200/90 font-bold mb-1">Telegram Bot Token:</label>
-                        <input type="888888" id="8939398684:AAEaQfZVtCdzzKMLyKdqBVHFrp1CuEoVXNc" placeholder="e.g. 123456789:ABCdefGhIJKlmNoPQ..." class="w-full bg-cnRed-950/80 border border-cnGold-600/40 rounded-xl px-3 py-2 text-amber-100 focus:outline-none focus:border-cnGold-400 font-mono">
+                        <input type="password" id="teleTokenInput" placeholder="e.g. 123456789:ABCdefGhIJKlmNoPQ..." class="w-full bg-cnRed-950/80 border border-cnGold-600/40 rounded-xl px-3 py-2 text-amber-100 focus:outline-none focus:border-cnGold-400 font-mono">
                     </div>
                     <div>
                         <label class="block text-amber-200/90 font-bold mb-1">Telegram Chat ID / Group ID:</label>
-                        <input type="text" id="1949334561" placeholder="e.g. -100123456789 or 98765432" class="w-full bg-cnRed-950/80 border border-cnGold-600/40 rounded-xl px-3 py-2 text-amber-100 focus:outline-none focus:border-cnGold-400 font-mono">
+                        <input type="text" id="teleChatIdInput" placeholder="e.g. -100123456789 or 98765432" class="w-full bg-cnRed-950/80 border border-cnGold-600/40 rounded-xl px-3 py-2 text-amber-100 focus:outline-none focus:border-cnGold-400 font-mono">
                     </div>
                 </div>
 
@@ -307,8 +307,8 @@
         let cart = {}; // { dishId: quantity }
         
         // Telegram Bot Defaults (Can be configured in Admin modal)
-        let teleBotToken = localStorage.getItem('8939398684:AAEaQfZVtCdzzKMLyKdqBVHFrp1CuEoVXNc') || '';
-        let teleChatId = localStorage.getItem('1949334561') || '';
+        let teleBotToken = localStorage.getItem('tele_bot_token') || '';
+        let teleChatId = localStorage.getItem('tele_chat_id') || '';
 
         // Category Translations
         const categories = [
@@ -432,8 +432,8 @@
             document.getElementById('currentTableNum').innerText = currentTable;
 
             // Populate Admin Inputs if existing
-            document.getElementById('8939398684:AAEaQfZVtCdzzKMLyKdqBVHFrp1CuEoVXNc').value = teleBotToken;
-            document.getElementById('1949334561').value = teleChatId;
+            document.getElementById('teleTokenInput').value = teleBotToken;
+            document.getElementById('teleChatIdInput').value = teleChatId;
 
             // Render Page Components
             renderCategories();
@@ -565,211 +565,3 @@
                         <i class="fa-solid fa-basket-shopping text-3xl mb-2 text-amber-900"></i>
                         <p>${currentLang === 'MY' ? 'မှာယူထားသော ဟင်းပွဲ မရှိသေးပါ။' : '暂无已点菜品'}</p>
                     </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = cartKeys.map(id => {
-                const dish = dishes.find(d => d.id === id);
-                const qty = cart[id];
-                const itemTotal = dish.price * qty;
-                const name = currentLang === 'MY' ? dish.nameMY : dish.nameCN;
-
-                return `
-                    <div class="flex items-center justify-between bg-cnRed-950/40 border border-cnGold-600/20 rounded-xl p-2.5">
-                        <div class="flex-1 pr-2">
-                            <h4 class="text-xs font-bold text-amber-100">${name}</h4>
-                            <div class="text-[11px] text-cnGold-400 mt-0.5">${dish.price.toLocaleString()} KS × ${qty}</div>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <span class="text-xs font-bold text-amber-200">${itemTotal.toLocaleString()} KS</span>
-                            <div class="flex items-center space-x-1.5">
-                                <button onclick="updateQty('${dish.id}', -1); renderCartModalItems();" class="w-6 h-6 rounded-md bg-cnRed-900 border border-cnGold-600/40 text-cnGold-300 text-xs flex items-center justify-center">
-                                    <i class="fa-solid fa-minus"></i>
-                                </button>
-                                <span class="text-xs font-bold text-amber-100 w-4 text-center">${qty}</span>
-                                <button onclick="updateQty('${dish.id}', 1); renderCartModalItems();" class="w-6 h-6 rounded-md bg-cnGold-600 text-cnDark text-xs font-bold flex items-center justify-center">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Toggle Modals
-        function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal.classList.contains('hidden')) {
-                if (modalId === 'cartModal') renderCartModalItems();
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-            }
-        }
-
-        // Submit Order to Telegram Bot
-        async function submitOrderToTelegram() {
-            const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
-            if (totalItems === 0) {
-                showToast(currentLang === 'MY' ? 'ကျေးဇူးပြု၍ ဟင်းပွဲ အရင်ရွေးချယ်ပါ' : '请先选择菜品');
-                return;
-            }
-
-            if (!teleBotToken || !teleChatId) {
-                showToast('Telegram Bot မချိတ်ဆက်ရသေးပါ။ ဆက်တင်တွင် ထည့်သွင်းပါ။');
-                toggleModal('cartModal');
-                toggleModal('adminModal');
-                return;
-            }
-
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>ပေးပို့နေပါသည်...</span>`;
-
-            // Prepare Order Summary
-            let orderText = `🔔 *အမှာစာအသစ် ရောက်ရှိပါသည်။ (NEW ORDER)*\n`;
-            orderText += `━━━━━━━━━━━━━━━━━━━\n`;
-            orderText += `🪑 *စားပွဲအမှတ် (Table):* #${currentTable}\n`;
-            orderText += `⏰ *အချိန် (Time):* ${new Date().toLocaleTimeString()}\n`;
-            orderText += `━━━━━━━━━━━━━━━━━━━\n\n`;
-            orderText += `🍲 *မှာယူထားသော ဟင်းပွဲများ:* \n`;
-
-            let totalPrice = 0;
-            for (let id in cart) {
-                const dish = dishes.find(d => d.id === id);
-                const qty = cart[id];
-                const cost = dish.price * qty;
-                totalPrice += cost;
-                orderText += `• ${dish.nameCN} (${dish.nameMY}) × ${qty} = ${cost.toLocaleString()} KS\n`;
-            }
-
-            const note = document.getElementById('orderNote').value.trim();
-            if (note) {
-                orderText += `\n📝 *မှတ်ချက် (Note):* ${note}\n`;
-            }
-
-            orderText += `\n💰 *စုစုပေါင်း ကျသင့်ငွေ:* *${totalPrice.toLocaleString()} KS*`;
-
-            // Send via Telegram Bot API
-            const url = `https://api.telegram.org/bot${teleBotToken}/sendMessage`;
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: teleChatId,
-                        text: orderText,
-                        parse_mode: 'Markdown'
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.ok) {
-                    showToast(currentLang === 'MY' ? 'မှာယူမှု အောင်မြင်ပါသည်။ Telegram သို့ ပေးပို့လိုက်ပါပြီ!' : '点餐成功！已发送至Telegram');
-                    cart = {}; // Reset cart
-                    document.getElementById('orderNote').value = '';
-                    renderDishes();
-                    updateCartSummary();
-                    toggleModal('cartModal');
-                } else {
-                    showToast('Telegram ပေးပို့မှု မအောင်မြင်ပါ: ' + (data.description || 'Error'));
-                }
-            } catch (err) {
-                showToast('ကွန်ရက် ချို့ယွင်းချက် ဖြစ်ပေါ်နေပါသည်။');
-                console.error(err);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `<i class="fa-paper-plane"></i> <span>${currentLang === 'MY' ? 'Telegram သို့ မှာယူမှု ပေးပို့မည်' : '发送订单至 Telegram'}</span>`;
-            }
-        }
-
-        // Save TeleBot Configuration
-        function saveTeleConfig() {
-            teleBotToken = document.getElementById('teleTokenInput').value.trim();
-            teleChatId = document.getElementById('teleChatIdInput').value.trim();
-
-            localStorage.setItem('tele_bot_token', teleBotToken);
-            localStorage.setItem('tele_chat_id', teleChatId);
-
-            showToast('TeleBot ဆက်တင်များ သိမ်းဆည်းပြီးပါပြီ!');
-            toggleModal('adminModal');
-        }
-
-        // Language Toggle Functionality
-        function toggleLanguage() {
-            currentLang = currentLang === 'MY' ? 'CN' : 'MY';
-            document.getElementById('langLabel').innerText = currentLang;
-
-            // UI Texts
-            document.getElementById('heroTitle').innerText = currentLang === 'MY' ? 'တရုတ်ရိုးရာ အကောင်းစား ဟင်းလျာများ' : '中华传统宫廷美食';
-            document.getElementById('heroSubtitle').innerText = currentLang === 'MY' ? 'လတ်ဆတ်သော ပါဝင်ပစ္စည်းများဖြင့် ချက်ပြုတ်ထားပါသည်။' : '严选新鲜食材，传承千年匠心';
-            document.getElementById('totalLabel').innerText = currentLang === 'MY' ? 'စုစုပေါင်း ကျသင့်ငွေ' : '合计金额';
-            document.getElementById('viewCartText').innerText = currentLang === 'MY' ? 'မှာယူမည်' : '去结算';
-            document.getElementById('cartModalTitle').innerText = currentLang === 'MY' ? 'သင့်မှာယူမှု စာရင်း' : '您的点菜清单';
-            document.getElementById('noteLabel').innerText = currentLang === 'MY' ? 'မှတ်ချက် (လိုလားချက်များ ရေးရန်):' : '备注要求 (如：少辣、不要香菜)';
-            document.getElementById('totalCartLabel').innerText = currentLang === 'MY' ? 'စုစုပေါင်း ကျသင့်ငွေ:' : '应付总额:';
-            document.getElementById('sendOrderBtnText').innerText = currentLang === 'MY' ? 'Telegram သို့ မှာယူမှု ပေးပို့မည်' : '发送订单至 Telegram';
-
-            updateNoticeText();
-            renderCategories();
-            renderDishes();
-        }
-
-        function updateNoticeText() {
-            document.getElementById('noticeText').innerText = currentLang === 'MY' 
-                ? `စားပွဲအမှတ် (${currentTable}) မှ စကန်ဖတ်ထားပါသည်` 
-                : `已识别桌号 (${currentTable})`;
-        }
-
-        // Populate Table Numbers for QR Generation
-        function populateQrTableSelect() {
-            const select = document.getElementById('qrTableSelect');
-            let html = '';
-            for(let i=1; i<=20; i++) {
-                const num = String(i).padStart(2, '0');
-                html += `<option value="${num}">စားပွဲ ${num} (Table ${num})</option>`;
-            }
-            select.innerHTML = html;
-            generateQrCode();
-        }
-
-        // Generate Table QR Code
-        function generateQrCode() {
-            const selectedTable = document.getElementById('qrTableSelect').value;
-            document.getElementById('qrTableDisplayNum').innerText = selectedTable;
-            
-            const qrContainer = document.getElementById('qrcodeCanvas');
-            qrContainer.innerHTML = '';
-
-            // Clean URL without menu clutter - just pointing to the web app with table parameter
-            const currentBaseUrl = window.location.href.split('?')[0];
-            const qrTargetUrl = `${currentBaseUrl}?table=${selectedTable}`;
-
-            new QRCode(qrContainer, {
-                text: qrTargetUrl,
-                width: 150,
-                height: 150,
-                colorDark: "#450a0a",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-
-        // Toast Notification Helper
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = message;
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            toast.classList.add('opacity-100');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 3000);
-        }
-    </script>
-</body>
-</html>
